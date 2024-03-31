@@ -11,8 +11,8 @@ public final class ErrorUtils {
         final ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(customError.getHttpStatus());
         //response set Content
-        response.writeWith(Mono.just(response.bufferFactory().wrap(customError.getMessage().getBytes())));
-
-        return response.setComplete();
+        String message = customError.getMessage();
+        message = "{\"message\":\"" + message + "\"}";
+        return response.writeWith(Mono.just(response.bufferFactory().wrap(message.getBytes())));
     }
 }
