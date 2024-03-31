@@ -14,3 +14,14 @@ eureka:
 spring:
   application:
     name: gateway-service
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user-service/login/**
+            - Method= GET
+          filters:
+            - RemoveRequestHeader=Cookie
+            - RewritePath=/user/(?<segment>.*), /$\{segment}
