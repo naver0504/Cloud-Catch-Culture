@@ -1,25 +1,38 @@
 package com.example.userservice.controller;
 
+import com.example.userservice.dto.PointResponseDTO;
+import com.example.userservice.dto.ProfileResponseDTO;
 import com.example.userservice.entity.User;
 import com.example.userservice.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
 
-    //Test 용도
-    @GetMapping("/user")
-    public User home(@RequestHeader("email") String email, HttpServletRequest request) {
-        log.info("Email: {}", email);
-        return userService.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found"));
+    @GetMapping("/profile")
+    public ResponseEntity<ProfileResponseDTO> home(@RequestHeader("email") String email) {
+        return ResponseEntity.ok(ProfileResponseDTO.of(userService.findByEmail(email)));
     }
+
+    @PatchMapping("/profile/nickname")
+    public ResponseEntity<Void> updateUserProfile(final @RequestHeader("email") String email, @RequestParam String nickName) {
+        userService.updateUserNickname(email, nickName);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/point")
+    public ResponseEntity<PointResponseDTO> getUserPoint(final @RequestHeader("email") String email) {
+        return ResponseEntity.ok(PointResponseDTO.of(userService.findUserPointByEmail(email)));
+    }
+
+
 }
