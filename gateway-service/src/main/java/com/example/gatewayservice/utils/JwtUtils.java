@@ -20,7 +20,7 @@ public class JwtUtils {
     private final Environment environment;
     private SecretKey secretKey;
     private final String PREFIX = "Bearer ";
-    public static String EMAIL = "email";
+    public static String USER_ID = "userId";
 
 
     @PostConstruct
@@ -46,8 +46,8 @@ public class JwtUtils {
                 .parseSignedClaims(jwtToken);
     }
 
-    public String getEmailFromClaims(Jws<Claims> claims) {
-        return claims.getBody().get(EMAIL, String.class);
+    public Long getEmailFromClaims(Jws<Claims> claims) {
+        return claims.getBody().get(USER_ID, Long.class);
     }
 
     private String subtractPrefix(final String token) {

@@ -19,7 +19,7 @@ import java.util.Date;
 @Slf4j
 public final class JwtTokenProvider {
 
-    private static final String EMAIL = "email";
+    private static final String USER_ID = "userId";
     private static final String ROLE = "role";
 
     @Value("${jwt.secret}")
@@ -35,9 +35,9 @@ public final class JwtTokenProvider {
         hmacShaKey = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(final String email, final Role role) {
+    public String generateToken(final long userId, final Role role) {
         return Jwts.builder()
-                .claim(EMAIL, email)
+                .claim(USER_ID, userId)
                 .claim(ROLE, role)
                 .signWith(hmacShaKey)
                 .expiration(Date.from(Instant.now().plusMillis(tokenExpiration)))

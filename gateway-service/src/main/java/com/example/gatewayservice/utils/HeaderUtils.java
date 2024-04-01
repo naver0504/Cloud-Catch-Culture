@@ -6,9 +6,9 @@ import static com.example.gatewayservice.utils.JwtUtils.*;
 
 public final class HeaderUtils {
 
-    public static void addEmailHeader(final ServerHttpRequest request, final String email) {
+    public static void addEmailHeader(final ServerHttpRequest request, final long userId) {
         // Add email header
-        request.mutate().header(EMAIL, email).build();
+        request.mutate().header(USER_ID, String.valueOf(userId)).build();
     }
 
 

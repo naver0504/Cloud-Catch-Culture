@@ -50,10 +50,10 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 return onError(exchange, CustomError.INVALID_TOKEN);
             }
 
-            final String email = jwtUtils.getEmailFromClaims(claims.get());
-            log.info("Email: {}", email);
+            final long userId = jwtUtils.getEmailFromClaims(claims.get());
+            log.info("User_id: {}", userId);
 
-            HeaderUtils.addEmailHeader(request, email);
+            HeaderUtils.addEmailHeader(request, userId);
             return chain.filter(exchange);
         };
     }

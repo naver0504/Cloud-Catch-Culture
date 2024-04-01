@@ -20,7 +20,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         final CustomOAuth2User principal = (CustomOAuth2User) authentication.getPrincipal();
-        final String jwtToken = jwtTokenProvider.generateToken(principal.getEmail(), principal.getRole());
+        final String jwtToken = jwtTokenProvider.generateToken(principal.getUserId(), principal.getRole());
         log.info("jwtToken: {}", jwtToken);
         jwtTokenProvider.sendCookie(response, jwtToken);
         response.sendRedirect("/");
