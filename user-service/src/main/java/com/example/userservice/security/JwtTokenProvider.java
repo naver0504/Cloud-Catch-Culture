@@ -22,7 +22,7 @@ public final class JwtTokenProvider {
     private static final String EMAIL = "email";
     private static final String ROLE = "role";
 
-    @Value("${jwt.secretKey}")
+    @Value("${jwt.secret}")
     private String secretKey;
 
     @Value("${jwt.expiration}")
