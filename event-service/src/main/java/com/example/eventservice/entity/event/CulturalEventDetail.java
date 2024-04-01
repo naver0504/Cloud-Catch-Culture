@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.geo.Point;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.io.ParseException;
+import org.locationtech.jts.io.WKTReader;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,8 +43,8 @@ public class CulturalEventDetail {
     @Column(columnDefinition = "TEXT")
     private String reservationLink;
 
-    @Column(columnDefinition = "GEOMETRY")
     @JsonIgnore
+    @Column(columnDefinition = "GEOMETRY")
     private Point geography;
 
     private String wayToCome;
@@ -55,7 +57,14 @@ public class CulturalEventDetail {
             return null;
         }
 
-        return new Point(latitude, longitude);
+        final String pointWKT = String.format("POINT(%s %s)", latitude, longitude);
+        final Point point;
+        try {
+            point = (Point) new WKTReader().read(pointWKT);
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        return point;
     }
 
     public Double getLatitude() { return this.geography == null ? null : this.geography.getX();}
