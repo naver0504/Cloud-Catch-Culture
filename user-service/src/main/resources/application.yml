@@ -4,6 +4,8 @@ server:
 spring:
   application:
     name: user-service
+  profiles:
+    include: oauth
   datasource:
     url: jdbc:mysql://localhost:3306/user-service
     driver-class-name: com.mysql.cj.jdbc.Driver
