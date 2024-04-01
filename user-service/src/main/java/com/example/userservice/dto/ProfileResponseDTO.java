@@ -10,6 +10,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Builder
+@Getter
 public class ProfileResponseDTO {
 
     private String storedProfileImageUrl;
