@@ -33,3 +33,11 @@ spring:
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
             - AuthenticationFilter
 
+        - id: event-service
+          uri: lb://EVENT-SERVICE
+          predicates:
+            - Path=/event-service/**
+            - Method= GET, POST, PATCH, DELETE
+          filters:
+            - RewritePath=/event-service/(?<segment>.*), /$\{segment}
+            - AuthenticationFilter
