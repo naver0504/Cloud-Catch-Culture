@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -15,13 +14,18 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public User findByEmail(final String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found"));
+    }
+
+    public int findUserPointByEmail(final String email) {
+        return userRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("User not found")).getPoint();
     }
 
     @Transactional
-    public User createUser(User user) {
-        userRepository.save(user);
-        return user;
+    public void updateUserNickname(final String email, final String nickname) {
+        userRepository.updateUserNickname(email, nickname);
     }
+
+
 }
