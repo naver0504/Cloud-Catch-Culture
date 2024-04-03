@@ -37,12 +37,15 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 
             final ServerHttpRequest request = exchange.getRequest();
 
-            final Optional<HttpCookie> httpCookie = CookieUtils.getAuthorizationCookie(request);
-            if(httpCookie.isEmpty()) {
+            HttpCookie httpCookie = null;
+
+            try {
+                 httpCookie = CookieUtils.getAuthorizationCookie(request);
+            } catch (Exception e) {
                 return onError(exchange, CustomError.NO_AUTHORIZATION_HEADER);
             }
 
-            final String jwtToken = CookieUtils.deserialize(httpCookie.get().getValue(), String.class);
+            final String jwtToken = CookieUtils.deserialize(httpCookie.getValue(), String.class);
             log.info("JWT Token: {}", jwtToken);
             final Optional<Jws<Claims>> claims = jwtUtils.getClaims(jwtToken);
 
