@@ -23,7 +23,7 @@ public class InteractionService {
     @Transactional
     public void saveLikeStar(final int culturalEventId, final long userId, final LikeStar likeStar) {
         if (interactionQueryRepository.isLikeStarExist(culturalEventId, userId, likeStar)) {
-            throw new IllegalStateException("Like already exists");
+            throw new IllegalStateException("Like already exists " + Thread.currentThread().getName());
         }
         final Interaction interaction = createInteraction(culturalEventId, userId, likeStar);
         interactionRepository.save(interaction);

@@ -44,16 +44,18 @@ public class CulturalEventService {
         culturalEventRepository.updateViewCount(culturalEventId);
     }
 
-    @Transactional
-    public void updateLikeCount(final int culturalEventId, final int count) {
-        culturalEventRepository.updateLikeCount(culturalEventId, count);
-    }
-
+    /***
+     *
+     * findByIdForUpdate에서 xlock을 걸어주어 동시성 문제를 해결한다.
+     * 사용자가 동시에 여러 번 좋아요를 눌러도 가장 처음 접근한 트랜잭션이 culturalEvent의 해당 컬럼에 대한 xlock을 걸어 다른 트랜잭션이 접근하지 못하게 한다.
+     * 따라서 동시성 문제를 해결할 수 있다.
+     * 만약 findByIdForUpdate가 아닌 단순 select로 조회한다면 동시성 문제가 발생할 수 있다.
+     * 단순 select로 조회 시 deadlock이 발생한다.
+     *
+     */
     @Transactional
     public void createInteraction(final int culturalEventId, final long userId, final LikeStar likeStar) {
-        if (!culturalEventQueryRepository.isCulturalEventExist(culturalEventId)) {
-            throw new IllegalStateException("Cultural event does not exist");
-        }
+        culturalEventRepository.findByIdForUpdate(culturalEventId).orElseThrow(() -> new IllegalStateException("Cultural event does not exist"));
         interactionService.saveLikeStar(culturalEventId, userId, likeStar);
         if(likeStar == LikeStar.LIKE){
             log.info("Thread name: {}", Thread.currentThread().getName());
@@ -61,12 +63,24 @@ public class CulturalEventService {
         }
     }
 
+
+    /***
+     *
+     * findByIdForUpdate에서 xlock을 걸어주어 동시성 문제를 해결한다.
+     * 사용자가 동시에 여러 번 좋아요를 눌러도 가장 처음 접근한 트랜잭션이 culturalEvent의 해당 컬럼에 대한 xlock을 걸어 다른 트랜잭션이 접근하지 못하게 한다.
+     * 따라서 동시성 문제를 해결할 수 있다.
+     * 만약 findByIdForUpdate가 아닌 단순 select로 조회한다면 동시성 문제가 발생할 수 있다.
+     * 단순 select로 조회 시 100번의 동시 요청일 경우 원래는 1번만 좋아요 수가 감소해야 하지만 100번 감소한다.
+     */
     @Transactional
     public void cancelInteraction(final int culturalEventId, final long userId, final LikeStar likeStar) {
-        if (!culturalEventQueryRepository.isCulturalEventExist(culturalEventId)) {
-            throw new IllegalStateException("Cultural event does not exist");
-        }
+//        if (!culturalEventQueryRepository.isCulturalEventExist(culturalEventId)) {
+//            throw new IllegalStateException("Cultural event does not exist");
+//        }
+
+        culturalEventRepository.findByIdForUpdate(culturalEventId).orElseThrow(() -> new IllegalStateException("Cultural event does not exist"));
         interactionService.deleteLikeStar(culturalEventId, userId, likeStar);
         if(likeStar == LikeStar.LIKE) culturalEventRepository.updateLikeCount(culturalEventId, MINUS_COUNT);
+
     }
 }

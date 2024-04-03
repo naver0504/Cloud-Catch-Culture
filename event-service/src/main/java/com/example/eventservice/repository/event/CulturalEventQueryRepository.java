@@ -25,12 +25,12 @@ public class CulturalEventQueryRepository {
 
     private final JPAQueryFactory queryFactory;
     
-    public boolean isCulturalEventExist(final int culturalEventId) {
-        return queryFactory.selectOne()
-                .from(culturalEvent)
-                .where(culturalEventIdEq(culturalEventId))
-                .fetchOne() != null;
-    }
+//    public boolean isCulturalEventExist(final int culturalEventId) {
+//        return queryFactory.selectOne()
+//                .from(culturalEvent)
+//                .where(culturalEventIdEq(culturalEventId))
+//                .fetchOne() != null;
+//    }
 
     public Page<EventResponseDTO> getCulturalEventList(final String keyword, final List<Category> categoryList,
                                                        final Pageable pageable, final SortType sortType) {

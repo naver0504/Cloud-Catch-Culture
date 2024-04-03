@@ -7,8 +7,14 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 
 public interface CulturalEventRepository extends JpaRepository<CulturalEvent, Long>{
+
+
+    @Query(value = "select * from cultural_event as c where c.id = :culturalEventId for update", nativeQuery = true)
+    Optional<CulturalEvent> findByIdForUpdate(int culturalEventId);
 
     @Query("SELECT c.culturalEventDetail FROM CulturalEvent c WHERE c.id = :culturalEventId")
     CulturalEventDetail getCulturalEventDetails(int culturalEventId);
