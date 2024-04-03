@@ -40,4 +40,10 @@ public class CulturalEvent {
         this.viewCount = 0;
         this.likeCount = 0;
     }
+
+    public static CulturalEvent createCulturalEvent(final int culturalEventId) {
+        return CulturalEvent.builder()
+                .id(culturalEventId)
+                .build();
+    }
 }
