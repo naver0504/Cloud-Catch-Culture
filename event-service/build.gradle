@@ -38,6 +38,12 @@ dependencies {
     // 위치 저장용
     implementation group: 'org.hibernate', name: 'hibernate-spatial', version: '6.1.7.Final'
 
+
+    // ⭐ Spring boot 3.x이상에서 QueryDsl 패키지를 정의하는 방법
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 }
 
 dependencyManagement {
@@ -49,3 +55,18 @@ dependencyManagement {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+def querydslDir = "$buildDir/generated/querydsl"
+
+sourceSets {
+    main.java.srcDirs += [ querydslDir ]
+}
+
+tasks.withType(JavaCompile) {
+    options.generatedSourceOutputDirectory.set(file(querydslDir))
+}
+
+clean.doLast {
+    file(querydslDir).deleteDir()
+}
+
