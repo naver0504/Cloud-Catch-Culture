@@ -51,10 +51,14 @@ public class CulturalEventService {
      * 따라서 동시성 문제를 해결할 수 있다.
      * 만약 findByIdForUpdate가 아닌 단순 select로 조회한다면 동시성 문제가 발생할 수 있다.
      * 단순 select로 조회 시 deadlock이 발생한다.
-     *
+     * DeadLock이 발생하는 이유는 interactionService에서 interaction insert 시에 해당 부모 culturalEvent에 s-lcok을 걸어둔다.
+     * 그 후 updateLikeCount에서 해당 culturalEvent에 update를 위해 x-lock을 획득해야하지만
+     * 동시에 요청한 다른 트랜잭션에서 s-lock을 가지고 있으므로 x-lock을 획득하지 못하고 대기하게 된다. (x-lock은 다른 트랜잭션에서 s-lock이나 x-lock을 가지고 있을 때 획득 X)
+     * 따라서 데드락이 발생한다.
      */
     @Transactional
     public void createInteraction(final int culturalEventId, final long userId, final LikeStar likeStar) {
+
         culturalEventRepository.findByIdForUpdate(culturalEventId).orElseThrow(() -> new IllegalStateException("Cultural event does not exist"));
         interactionService.saveLikeStar(culturalEventId, userId, likeStar);
         if(likeStar == LikeStar.LIKE){
@@ -74,9 +78,6 @@ public class CulturalEventService {
      */
     @Transactional
     public void cancelInteraction(final int culturalEventId, final long userId, final LikeStar likeStar) {
-//        if (!culturalEventQueryRepository.isCulturalEventExist(culturalEventId)) {
-//            throw new IllegalStateException("Cultural event does not exist");
-//        }
 
         culturalEventRepository.findByIdForUpdate(culturalEventId).orElseThrow(() -> new IllegalStateException("Cultural event does not exist"));
         interactionService.deleteLikeStar(culturalEventId, userId, likeStar);
