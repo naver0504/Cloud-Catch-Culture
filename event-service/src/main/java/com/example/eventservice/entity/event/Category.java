@@ -3,6 +3,7 @@ package com.example.eventservice.entity.event;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Slf4j
 public enum Category {
@@ -22,6 +23,9 @@ public enum Category {
 
     private final String code;
 
+
+    public static final List<Category> allOfCategory = Arrays.asList(Category.values());
+
     Category(String code) {
         this.code = code;
     }
@@ -30,7 +34,7 @@ public enum Category {
     }
 
     public static Category of(final String code) {
-        return Arrays.stream(Category.values())
+        return allOfCategory.stream()
                 .filter(category -> category.getCode().contains(code))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Category"));
