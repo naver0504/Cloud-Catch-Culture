@@ -1,4 +1,4 @@
-package com.example.eventservice.converter;
+package com.example.eventservice.common.converter;
 
 import jakarta.persistence.AttributeConverter;
 

@@ -1,6 +1,6 @@
 package com.example.eventservice.entity.event;
 
-import com.example.eventservice.converter.StoredImageUrlConverter;
+import com.example.eventservice.common.converter.StoredImageUrlConverter;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
