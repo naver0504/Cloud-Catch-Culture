@@ -37,10 +37,10 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
 
             final ServerHttpRequest request = exchange.getRequest();
 
-            HttpCookie httpCookie = null;
 
+            final HttpCookie httpCookie;
             try {
-                 httpCookie = CookieUtils.getAuthorizationCookie(request);
+                httpCookie = CookieUtils.getAuthorizationCookie(request);
             } catch (Exception e) {
                 return onError(exchange, CustomError.NO_AUTHORIZATION_HEADER);
             }
@@ -53,10 +53,10 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 return onError(exchange, CustomError.INVALID_TOKEN);
             }
 
-            final long userId = jwtUtils.getEmailFromClaims(claims.get());
+            final long userId = jwtUtils.getUserIdFromClaims(claims.get());
             log.info("User_id: {}", userId);
 
-            HeaderUtils.addEmailHeader(request, userId);
+            HeaderUtils.addUserIdHeader(request, userId);
             return chain.filter(exchange);
         };
     }
