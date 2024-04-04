@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.example.eventservice.common.utils.PageUtils.*;
-import static com.example.eventservice.service.event.UpdateLikeStarCount.*;
+import static com.example.eventservice.entity.interaction.LikeStar.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -43,8 +43,8 @@ public class CulturalEventService {
         culturalEventRepository.updateViewCount(culturalEventId);
 
         culturalEventDetails.setLikeAndStar(
-                interactionService.isLikedOrStar(culturalEventId, userId, LikeStar.LIKE),
-                interactionService.isLikedOrStar(culturalEventId, userId, LikeStar.STAR)
+                interactionService.isLikedOrStar(culturalEventId, userId, LIKE),
+                interactionService.isLikedOrStar(culturalEventId, userId, STAR)
         );
 
         return culturalEventDetails;

@@ -26,4 +26,8 @@ public interface CulturalEventRepository extends JpaRepository<CulturalEvent, Lo
     @Query("update CulturalEvent c set c.likeCount = c.likeCount + :count where c.id = :culturalEventId")
     @Modifying(clearAutomatically = true)
     void updateLikeCount(int culturalEventId, int count);
+
+    @Query("update CulturalEvent c set c.starCount = c.starCount + :count where c.id = :culturalEventId")
+    @Modifying(clearAutomatically = true)
+    void updateStarCount(int culturalEventId, int count);
 }
