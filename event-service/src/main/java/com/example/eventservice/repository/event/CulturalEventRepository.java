@@ -16,9 +16,6 @@ public interface CulturalEventRepository extends JpaRepository<CulturalEvent, Lo
     @Query(value = "select * from cultural_event as c where c.id = :culturalEventId for update", nativeQuery = true)
     Optional<CulturalEvent> findByIdForUpdate(int culturalEventId);
 
-    @Query("SELECT c.culturalEventDetail FROM CulturalEvent c WHERE c.id = :culturalEventId")
-    CulturalEventDetail getCulturalEventDetails(int culturalEventId);
-
     @Query("update CulturalEvent c set c.viewCount = c.viewCount + 1 where c.id = :culturalEventId")
     @Modifying(clearAutomatically = true)
     void updateViewCount(int culturalEventId);
