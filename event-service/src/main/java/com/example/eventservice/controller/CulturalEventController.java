@@ -1,6 +1,7 @@
 package com.example.eventservice.controller;
 
 import com.example.eventservice.common.type.SortType;
+import com.example.eventservice.dto.CulturalEventDetailsResponseDTO;
 import com.example.eventservice.dto.EventResponseDTO;
 import com.example.eventservice.entity.event.Category;
 import com.example.eventservice.entity.interaction.LikeStar;
@@ -26,6 +27,11 @@ public class CulturalEventController {
                                                                        final @RequestParam(required = false, defaultValue = "0") int offset,
                                                                        final @RequestParam(required = false, defaultValue = "RECENT") SortType sortType) {
         return ResponseEntity.ok(culturalEventService.getCulturalEventList(keyword, categoryList, offset, sortType));
+    }
+
+    @GetMapping("{culturalEventId}")
+    public ResponseEntity<CulturalEventDetailsResponseDTO> getCulturalEvent(final @PathVariable int culturalEventId, final @RequestHeader("userId") long userId){
+        return ResponseEntity.ok(culturalEventService.getCulturalEventDetails(culturalEventId, userId));
     }
 
     @PostMapping("{culturalEventId}/likestar")
