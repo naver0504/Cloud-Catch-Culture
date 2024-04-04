@@ -1,6 +1,7 @@
 package com.example.eventservice.repository.event;
 
 import com.example.eventservice.common.type.SortType;
+import com.example.eventservice.dto.CulturalEventDetailsResponseDTO;
 import com.example.eventservice.dto.EventResponseDTO;
 import com.example.eventservice.entity.event.Category;
 import com.querydsl.core.types.Projections;
@@ -15,22 +16,18 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.example.eventservice.entity.visitauth.QVisitAuth.*;
 import static com.example.eventservice.repository.event.query.OrderQuery.setOrderWithSortType;
 import static com.example.eventservice.repository.event.query.WhereQuery.*;
 import static com.example.eventservice.entity.event.QCulturalEvent.culturalEvent;
+import static com.example.eventservice.repository.visitauth.query.WhereQuery.visitAuthUserIdEq;
 
 @Repository
 @RequiredArgsConstructor
 public class CulturalEventQueryRepository {
 
     private final JPAQueryFactory queryFactory;
-    
-//    public boolean isCulturalEventExist(final int culturalEventId) {
-//        return queryFactory.selectOne()
-//                .from(culturalEvent)
-//                .where(culturalEventIdEq(culturalEventId))
-//                .fetchOne() != null;
-//    }
+
 
     public Page<EventResponseDTO> getCulturalEventList(final String keyword, final List<Category> categoryList,
                                                        final Pageable pageable, final SortType sortType) {
@@ -72,6 +69,38 @@ public class CulturalEventQueryRepository {
 
         return new PageImpl<>(content, pageable, count);
 
+    }
+
+    public CulturalEventDetailsResponseDTO getCulturalEventDetails(final int culturalEventId, final long userId) {
+
+        if (!existsCulturalEvent(culturalEventId)) {
+            throw new IllegalArgumentException("Cultural event does not exist");
+        }
+
+        return queryFactory.select(Projections.fields(
+                        CulturalEventDetailsResponseDTO.class,
+                        culturalEvent.culturalEventDetail,
+                        visitAuth.isAuthenticated.as("isAuthenticated"),
+                        culturalEvent.likeCount,
+                        culturalEvent.starCount
+                ))
+                .from(culturalEvent)
+                .leftJoin(visitAuth)
+                .on(
+                        culturalEventIdEqWithJoin(visitAuth.culturalEvent.id),
+                        visitAuthUserIdEq(userId)
+                )
+                .where(
+                        culturalEventIdEq(culturalEventId)
+                )
+                .fetchOne();
+    }
+
+    private boolean existsCulturalEvent(final int culturalEventId) {
+        return queryFactory.selectOne()
+                .from(culturalEvent)
+                .where(culturalEventIdEq(culturalEventId))
+                .fetchFirst() != null;
     }
 
 
