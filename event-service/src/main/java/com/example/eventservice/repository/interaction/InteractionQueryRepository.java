@@ -18,8 +18,8 @@ public class InteractionQueryRepository {
         return queryFactory.selectOne()
                 .from(interaction)
                 .where(
-                        culturalEventIdEq(culturalEventId),
-                        userIdEq(userId),
+                        interactionCulturalEventIdEq(culturalEventId),
+                        interactionUserIdEq(userId),
                         likeStarEq(likeStar)
                 ).fetchOne() != null;
     }

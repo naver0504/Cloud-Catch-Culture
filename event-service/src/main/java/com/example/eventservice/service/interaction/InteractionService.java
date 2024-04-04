@@ -35,4 +35,8 @@ public class InteractionService {
         }
         interactionRepository.deleteInteraction(culturalEventId, userId, likeStar);
     }
+
+    public boolean isLikedOrStar(int culturalEventId, long userId, final LikeStar likeStar) {
+        return interactionQueryRepository.isLikeStarExist(culturalEventId, userId, likeStar);
+    }
 }
