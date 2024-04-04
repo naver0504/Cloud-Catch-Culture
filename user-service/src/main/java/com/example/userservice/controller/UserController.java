@@ -19,18 +19,18 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/profile")
-    public ResponseEntity<ProfileResponseDTO> home(@RequestHeader("email") String email) {
+    public ResponseEntity<ProfileResponseDTO> home(@RequestHeader("userId") String email) {
         return ResponseEntity.ok(ProfileResponseDTO.of(userService.findByEmail(email)));
     }
 
     @PatchMapping("/profile/nickname")
-    public ResponseEntity<Void> updateUserProfile(final @RequestHeader("email") String email, @RequestParam String nickName) {
+    public ResponseEntity<Void> updateUserProfile(final @RequestHeader("userId") String email, @RequestParam String nickName) {
         userService.updateUserNickname(email, nickName);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/point")
-    public ResponseEntity<PointResponseDTO> getUserPoint(final @RequestHeader("email") String email) {
+    public ResponseEntity<PointResponseDTO> getUserPoint(final @RequestHeader("userId") String email) {
         return ResponseEntity.ok(PointResponseDTO.of(userService.findUserPointByEmail(email)));
     }
 
