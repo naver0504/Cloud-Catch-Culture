@@ -15,22 +15,16 @@ import java.io.Serializable;
 public class CulturalEventDetailsResponseDTO implements Serializable {
 
     private CulturalEventDetail culturalEventDetail;
+    private boolean isAuthenticated;
+    private int likeCount;
+    private int starCount;
 
-    public static CulturalEventDetailsResponseDTO of(final CulturalEventDetail culturalEventDetail) {
-        return CulturalEventDetailsResponseDTO.builder()
-                .culturalEventDetail(culturalEventDetail)
-                .build();
-    }
-//    private boolean isAuthenticated;
     private boolean isLiked;
-    private boolean isStored;
-//
-//    private int likeCount;
-//    private long bookmarkCount;
-//
-//    public void setLikeAndBookmark(final boolean isLiked, final boolean isBookmarked) {
-//        this.isLiked = isLiked;
-//        this.isBookmarked = isBookmarked;
-//    }
+    private boolean isStar;
+
+    public void setLikeAndStar(final boolean isLiked, final boolean isStar) {
+        this.isLiked = isLiked;
+        this.isStar = isStar;
+    }
 
 }

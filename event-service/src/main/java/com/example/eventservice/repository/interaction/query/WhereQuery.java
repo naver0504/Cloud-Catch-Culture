@@ -7,11 +7,11 @@ import static com.example.eventservice.entity.interaction.QInteraction.interacti
 
 public class WhereQuery {
 
-    public static BooleanExpression culturalEventIdEq(int culturalEventId) {
+    public static BooleanExpression interactionCulturalEventIdEq(int culturalEventId) {
         return interaction.culturalEvent.id.eq(culturalEventId);
     }
 
-    public static BooleanExpression userIdEq(long userId) {
+    public static BooleanExpression interactionUserIdEq(long userId) {
         return interaction.userId.eq(userId);
     }
 

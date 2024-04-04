@@ -4,7 +4,6 @@ import com.example.eventservice.common.type.SortType;
 import com.example.eventservice.dto.CulturalEventDetailsResponseDTO;
 import com.example.eventservice.dto.EventResponseDTO;
 import com.example.eventservice.entity.event.Category;
-import com.example.eventservice.entity.event.CulturalEventDetail;
 import com.example.eventservice.entity.interaction.LikeStar;
 import com.example.eventservice.repository.event.CulturalEventQueryRepository;
 import com.example.eventservice.repository.event.CulturalEventRepository;
@@ -18,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.example.eventservice.common.utils.PageUtils.*;
+import static com.example.eventservice.service.event.UpdateLikeStarCount.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -25,8 +25,8 @@ import static com.example.eventservice.common.utils.PageUtils.*;
 @Slf4j
 public class CulturalEventService {
 
-    private static int PLUS_COUNT = 1;
-    private static int MINUS_COUNT = -1;
+    private final int PLUS_COUNT = 1;
+    private final int MINUS_COUNT = -1;
 
 
     private final CulturalEventQueryRepository culturalEventQueryRepository;
@@ -38,10 +38,16 @@ public class CulturalEventService {
     }
 
     @Transactional
-    public void getCulturalEventDetails(final int culturalEventId) {
-        culturalEventRepository.getCulturalEventDetails(culturalEventId);
-        log.info("Thread name: {}", Thread.currentThread().getName());
+    public CulturalEventDetailsResponseDTO getCulturalEventDetails(final int culturalEventId, final long userId) {
+        final CulturalEventDetailsResponseDTO culturalEventDetails = culturalEventQueryRepository.getCulturalEventDetails(culturalEventId, userId);
         culturalEventRepository.updateViewCount(culturalEventId);
+
+        culturalEventDetails.setLikeAndStar(
+                interactionService.isLikedOrStar(culturalEventId, userId, LikeStar.LIKE),
+                interactionService.isLikedOrStar(culturalEventId, userId, LikeStar.STAR)
+        );
+
+        return culturalEventDetails;
     }
 
     /***
@@ -61,10 +67,7 @@ public class CulturalEventService {
 
         culturalEventRepository.findByIdForUpdate(culturalEventId).orElseThrow(() -> new IllegalStateException("Cultural event does not exist"));
         interactionService.saveLikeStar(culturalEventId, userId, likeStar);
-        if(likeStar == LikeStar.LIKE){
-            log.info("Thread name: {}", Thread.currentThread().getName());
-            culturalEventRepository.updateLikeCount(culturalEventId, PLUS_COUNT);
-        }
+        getUpdateCountMethod(likeStar, culturalEventId, PLUS_COUNT).accept(culturalEventRepository);
     }
 
 
@@ -81,7 +84,7 @@ public class CulturalEventService {
 
         culturalEventRepository.findByIdForUpdate(culturalEventId).orElseThrow(() -> new IllegalStateException("Cultural event does not exist"));
         interactionService.deleteLikeStar(culturalEventId, userId, likeStar);
-        if(likeStar == LikeStar.LIKE) culturalEventRepository.updateLikeCount(culturalEventId, MINUS_COUNT);
+        getUpdateCountMethod(likeStar, culturalEventId, MINUS_COUNT).accept(culturalEventRepository);
 
     }
 }
