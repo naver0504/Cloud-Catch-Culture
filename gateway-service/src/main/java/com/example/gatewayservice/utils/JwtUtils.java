@@ -46,7 +46,7 @@ public class JwtUtils {
                 .parseSignedClaims(jwtToken);
     }
 
-    public Long getEmailFromClaims(Jws<Claims> claims) {
+    public Long getUserIdFromClaims(Jws<Claims> claims) {
         return claims.getBody().get(USER_ID, Long.class);
     }
 
