@@ -22,17 +22,10 @@ public class CulturalEvent {
 
     private int viewCount;
     private int likeCount;
+    private int starCount;
 
     //ex) 만 8세 이상
     private LocalDateTime createdAt;
-
-    public void addLikeCount() {
-        this.likeCount++;
-    }
-
-    public void minusLikeCount() {
-        this.likeCount--;
-    }
 
     @PrePersist
     public void prePersist() {
