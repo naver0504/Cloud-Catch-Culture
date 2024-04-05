@@ -1,6 +1,6 @@
-package com.example.eventservice.entity.visitauth;
+package com.example.reportservice.entity;
 
-import com.example.eventservice.entity.event.CulturalEvent;
+import com.example.reportservice.converter.StoredFileUrlConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,32 +8,35 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class VisitAuth {
+public class VisitAuthRequest {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private boolean isAuthenticated;
+    @Column(columnDefinition = "TEXT")
+    @Convert(converter = StoredFileUrlConverter.class)
+    private List<String> storedFileUrl;
+
+    @Column(nullable = false)
+    private int userId;
+
+    @Column(nullable = false)
+    private int culturalEventId;
 
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
-    private long userId;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cultural_event_id")
-    private CulturalEvent culturalEvent;
 
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
-        this.isAuthenticated = false;
     }
+
 }
