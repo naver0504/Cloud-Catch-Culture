@@ -32,4 +32,18 @@ eureka:
       defaultZone: http://localhost:8761/eureka/
 
 openapi:
-  key: @YOUR_OPENAPI_KEY@
+  key: @YOUR_OPENAPI@
+
+
+cloud:
+  aws:
+    s3:
+      bucket: @YOUR_BUCKET@
+      region:
+        static: ap-northeast-2
+        auto: false
+    credentials:
+      access-key: @YOUR_ACCESS_KEY@
+      secret-key: @YOUR_SECRET_KEY@
+    stack:
+      auto: false

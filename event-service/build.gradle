@@ -44,6 +44,10 @@ dependencies {
     annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+    // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-aws-context
+    implementation group: 'org.springframework.cloud', name: 'spring-cloud-aws-context', version: '2.2.6.RELEASE'
+
 }
 
 dependencyManagement {
