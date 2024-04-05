@@ -51,7 +51,6 @@ public class CulturalEventService {
     }
 
     /***
-     *
      * findByIdForUpdate에서 xlock을 걸어주어 동시성 문제를 해결한다.
      * 사용자가 동시에 여러 번 좋아요를 눌러도 가장 처음 접근한 트랜잭션이 culturalEvent의 해당 컬럼에 대한 xlock을 걸어 다른 트랜잭션이 접근하지 못하게 한다.
      * 따라서 동시성 문제를 해결할 수 있다.
@@ -72,7 +71,6 @@ public class CulturalEventService {
 
 
     /***
-     *
      * findByIdForUpdate에서 xlock을 걸어주어 동시성 문제를 해결한다.
      * 사용자가 동시에 여러 번 좋아요를 눌러도 가장 처음 접근한 트랜잭션이 culturalEvent의 해당 컬럼에 대한 xlock을 걸어 다른 트랜잭션이 접근하지 못하게 한다.
      * 따라서 동시성 문제를 해결할 수 있다.

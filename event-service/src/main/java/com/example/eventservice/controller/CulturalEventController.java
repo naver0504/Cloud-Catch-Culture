@@ -47,7 +47,7 @@ public class CulturalEventController {
                                                         final @RequestParam("interaction") LikeStar likeStar,
                                                         final @RequestHeader("userId") long userId) {
         culturalEventService.cancelInteraction(culturalEventId, userId, likeStar);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.status(HttpStatus.ACCEPTED).build();
     }
 
 

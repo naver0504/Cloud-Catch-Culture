@@ -5,6 +5,7 @@ import com.example.eventservice.dto.CulturalEventDetailsResponseDTO;
 import com.example.eventservice.dto.EventResponseDTO;
 import com.example.eventservice.entity.event.Category;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -80,7 +81,10 @@ public class CulturalEventQueryRepository {
         return queryFactory.select(Projections.fields(
                         CulturalEventDetailsResponseDTO.class,
                         culturalEvent.culturalEventDetail,
-                        visitAuth.isAuthenticated.as("isAuthenticated"),
+                        new CaseBuilder()
+                                .when(visitAuth.id.isNotNull()).then(true)
+                                .otherwise(false).as("isAuthenticated")
+                        ,
                         culturalEvent.likeCount,
                         culturalEvent.starCount
                 ))

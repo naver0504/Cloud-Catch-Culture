@@ -29,6 +29,7 @@ public class InteractionService {
         interactionRepository.save(interaction);
     }
 
+    @Transactional
     public void deleteLikeStar(final int culturalEventId, final long userId, final LikeStar likeStar) {
         if (!interactionQueryRepository.isLikeStarExist(culturalEventId, userId, likeStar)) {
             throw new IllegalStateException("Like does not exist");

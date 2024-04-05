@@ -1,6 +1,5 @@
 package com.example.eventservice.entity.visitauth;
 
-import com.example.eventservice.common.converter.StoredImageUrlConverter;
 import com.example.eventservice.entity.event.CulturalEvent;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,7 +8,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter
@@ -21,10 +19,6 @@ public class VisitAuth {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @Column(columnDefinition = "TEXT")
-    @Convert(converter = StoredImageUrlConverter.class)
-    private List<String> storedImageUrl;
 
     private boolean isAuthenticated;
 
