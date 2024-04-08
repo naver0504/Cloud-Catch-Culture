@@ -26,7 +26,7 @@ public class VisitAuthRequest {
     private List<String> storedFileUrl;
 
     @Column(nullable = false)
-    private int userId;
+    private long userId;
 
     @Column(nullable = false)
     private int culturalEventId;
