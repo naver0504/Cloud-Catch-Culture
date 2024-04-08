@@ -1,4 +1,4 @@
-package com.example.reportservice.config;
+package com.example.reportservice.common.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
     @Value("${cloud.aws.credentials.secret-key}")
     private String secretKey;
 
-    @Value("${cloud.aws.region.static}")
+    @Value("${cloud.aws.s3.region.static}")
     private String region;
 
     @Bean
