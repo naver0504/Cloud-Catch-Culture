@@ -51,4 +51,16 @@ public class CulturalEventController {
     }
 
 
+    /***
+     *
+     * FeignClient를 통해 호출되는 API
+     * 문화행사 존재 여부를 확인한다.
+     *
+     */
+    @GetMapping("{culturalEventId}/visit-auth")
+    public ResponseEntity<Boolean> requestVisitAuth(final @PathVariable int culturalEventId) {
+        return ResponseEntity.status(HttpStatus.OK).body(culturalEventService.existsCulturalEvent(culturalEventId));
+    }
+
+
 }

@@ -100,7 +100,7 @@ public class CulturalEventQueryRepository {
                 .fetchOne();
     }
 
-    private boolean existsCulturalEvent(final int culturalEventId) {
+    public boolean existsCulturalEvent(final int culturalEventId) {
         return queryFactory.selectOne()
                 .from(culturalEvent)
                 .where(culturalEventIdEq(culturalEventId))

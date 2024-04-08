@@ -85,4 +85,8 @@ public class CulturalEventService {
         getUpdateCountMethod(likeStar, culturalEventId, MINUS_COUNT).accept(culturalEventRepository);
 
     }
+
+    public boolean existsCulturalEvent(final int culturalEventId) {
+        return culturalEventQueryRepository.existsCulturalEvent(culturalEventId);
+    }
 }
