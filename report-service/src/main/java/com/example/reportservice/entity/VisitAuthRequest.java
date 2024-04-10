@@ -33,6 +33,8 @@ public class VisitAuthRequest {
 
     private LocalDateTime createdAt;
 
+    private boolean isAuthenticated;
+
 
     @PrePersist
     public void prePersist() {
