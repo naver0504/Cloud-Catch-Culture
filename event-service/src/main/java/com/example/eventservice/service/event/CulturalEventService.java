@@ -4,6 +4,8 @@ import com.example.eventservice.common.type.SortType;
 import com.example.eventservice.dto.CulturalEventDetailsResponseDTO;
 import com.example.eventservice.dto.EventResponseDTO;
 import com.example.eventservice.entity.event.Category;
+import com.example.eventservice.entity.event.CulturalEvent;
+import com.example.eventservice.entity.event.CulturalEventDetail;
 import com.example.eventservice.entity.interaction.LikeStar;
 import com.example.eventservice.repository.event.CulturalEventQueryRepository;
 import com.example.eventservice.repository.event.CulturalEventRepository;
@@ -86,7 +88,9 @@ public class CulturalEventService {
 
     }
 
-    public boolean existsCulturalEvent(final int culturalEventId) {
-        return culturalEventQueryRepository.existsCulturalEvent(culturalEventId);
+    public CulturalEventDetail existsCulturalEvent(final int culturalEventId) {
+        final CulturalEvent culturalEvent = culturalEventRepository.findById(culturalEventId).orElse(null);
+        return culturalEvent == null ? null : culturalEvent.getCulturalEventDetail();
+
     }
 }
