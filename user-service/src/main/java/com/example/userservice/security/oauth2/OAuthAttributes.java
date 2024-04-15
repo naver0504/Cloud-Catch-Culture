@@ -1,8 +1,8 @@
 package com.example.userservice.security.oauth2;
 
-import com.example.userservice.entity.Role;
-import com.example.userservice.entity.SocialType;
-import com.example.userservice.entity.User;
+import com.example.userservice.entity.user.Role;
+import com.example.userservice.entity.user.SocialType;
+import com.example.userservice.entity.user.User;
 import com.example.userservice.security.oauth2.userinfo.OAuth2UserInfo;
 import lombok.Builder;
 import lombok.Getter;
