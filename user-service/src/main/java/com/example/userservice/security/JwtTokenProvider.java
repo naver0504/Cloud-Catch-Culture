@@ -1,6 +1,6 @@
 package com.example.userservice.security;
 
-import com.example.userservice.entity.Role;
+import com.example.userservice.entity.user.Role;
 import com.example.userservice.utils.CookieUtils;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
