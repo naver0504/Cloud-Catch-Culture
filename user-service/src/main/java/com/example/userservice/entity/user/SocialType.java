@@ -1,4 +1,4 @@
-package com.example.userservice.entity;
+package com.example.userservice.entity.user;
 
 import com.example.userservice.security.oauth2.userinfo.GoogleOAuth2UserInfo;
 import com.example.userservice.security.oauth2.userinfo.KakaoOAuth2UserInfo;
