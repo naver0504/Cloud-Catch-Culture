@@ -24,7 +24,6 @@ public class CulturalEvent {
     private int likeCount;
     private int starCount;
 
-    //ex) 만 8세 이상
     private LocalDateTime createdAt;
 
     @PrePersist
