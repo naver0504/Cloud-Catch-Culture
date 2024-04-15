@@ -1,8 +1,8 @@
 package com.example.userservice.dto;
 
-import com.example.userservice.entity.Role;
-import com.example.userservice.entity.SocialType;
-import com.example.userservice.entity.User;
+import com.example.userservice.entity.user.Role;
+import com.example.userservice.entity.user.SocialType;
+import com.example.userservice.entity.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
