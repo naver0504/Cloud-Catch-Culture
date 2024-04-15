@@ -46,17 +46,14 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
             }
 
             final String jwtToken = CookieUtils.deserialize(httpCookie.getValue(), String.class);
-            log.info("JWT Token: {}", jwtToken);
             final Optional<Jws<Claims>> claims = jwtUtils.getClaims(jwtToken);
 
             if(claims.isEmpty()) {
                 return onError(exchange, CustomError.INVALID_TOKEN);
             }
 
-            final long userId = jwtUtils.getUserIdFromClaims(claims.get());
-            log.info("User_id: {}", userId);
+            HeaderUtils.addUserDetailHeader(request, jwtUtils.getUserIdFromClaims(claims.get()), jwtUtils.getRoleFromClaims(claims.get()));
 
-            HeaderUtils.addUserIdHeader(request, userId);
             return chain.filter(exchange);
         };
     }
