@@ -1,7 +1,7 @@
 package com.example.userservice.security.oauth2;
 
-import com.example.userservice.entity.SocialType;
-import com.example.userservice.entity.User;
+import com.example.userservice.entity.user.SocialType;
+import com.example.userservice.entity.user.User;
 import com.example.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
