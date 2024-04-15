@@ -1,4 +1,4 @@
-package com.example.userservice.entity;
+package com.example.userservice.entity.user;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,6 +36,12 @@ public class User {
     @PrePersist
     public void prePersist() {
         this.point = 0;
+    }
+
+    public static User createUser(final long userId) {
+        return User.builder()
+                .id(userId)
+                .build();
     }
 
 
