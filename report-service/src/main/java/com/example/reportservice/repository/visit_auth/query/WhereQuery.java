@@ -1,4 +1,4 @@
-package com.example.reportservice.repository.query;
+package com.example.reportservice.repository.visit_auth.query;
 
 import com.example.reportservice.common.constant.VisitAuthConstant;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -15,7 +15,6 @@ public final class WhereQuery {
         return switch (visitAuthConstant) {
             case ALL -> null;
             case AUTHENTICATED -> visitAuthRequest.isAuthenticated.eq(true);
-            case UNAUTHENTICATED -> visitAuthRequest.isAuthenticated.eq(false);
         };
     }
 }

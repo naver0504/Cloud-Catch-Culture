@@ -1,4 +1,4 @@
-package com.example.reportservice.repository;
+package com.example.reportservice.repository.visit_auth;
 
 import com.example.reportservice.common.constant.VisitAuthConstant;
 import com.example.reportservice.dto.VisitAuthRequestResponseDTO;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.example.reportservice.entity.QVisitAuthRequest.visitAuthRequest;
-import static com.example.reportservice.repository.query.WhereQuery.*;
+import static com.example.reportservice.repository.visit_auth.query.WhereQuery.*;
 
 @Repository
 @RequiredArgsConstructor
@@ -23,7 +23,7 @@ public class VisitAuthRequestQueryRepository {
     private final int PAGE_SIZE = 10;
 
     public Slice<VisitAuthRequestResponseDTO> getVisitAuthRequestList(final int lastId, final VisitAuthConstant visitAuthConstant) {
-        List<VisitAuthRequestResponseDTO> content = queryFactory.select(Projections.constructor(
+        final List<VisitAuthRequestResponseDTO> content = queryFactory.select(Projections.constructor(
                         VisitAuthRequestResponseDTO.class,
                         visitAuthRequest.id,
                         visitAuthRequest.createdAt,

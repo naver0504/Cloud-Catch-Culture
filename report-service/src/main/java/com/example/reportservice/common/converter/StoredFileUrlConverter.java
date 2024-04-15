@@ -1,4 +1,4 @@
-package com.example.reportservice.converter;
+package com.example.reportservice.common.converter;
 
 import jakarta.persistence.AttributeConverter;
 

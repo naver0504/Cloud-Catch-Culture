@@ -1,15 +1,15 @@
-package com.example.reportservice.service;
+package com.example.reportservice.service.visit_auth;
 
 import com.example.reportservice.client.EventFeignClient;
-import com.example.reportservice.common.aop.AdminUser;
 import com.example.reportservice.common.constant.CulturalEventDetail;
 import com.example.reportservice.common.constant.VisitAuthConstant;
 import com.example.reportservice.common.utils.ImageUtils;
 import com.example.reportservice.dto.VisitAuthRequestDetailDTO;
 import com.example.reportservice.dto.VisitAuthRequestResponseDTO;
 import com.example.reportservice.entity.VisitAuthRequest;
-import com.example.reportservice.repository.VisitAuthRequestQueryRepository;
-import com.example.reportservice.repository.VisitAuthRequestRepository;
+import com.example.reportservice.repository.visit_auth.VisitAuthRequestQueryRepository;
+import com.example.reportservice.repository.visit_auth.VisitAuthRequestRepository;
+import com.example.reportservice.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -69,5 +69,10 @@ public class VisitAuthRequestService {
         }
 
         return VisitAuthRequestDetailDTO.of(visitAuthRequest, culturalEventDetail);
+    }
+
+    public void authenticateVisitAuthRequest(int visitAuthId) {
+        final VisitAuthRequest visitAuthRequest = visitAuthRequestRepository.findById(visitAuthId).orElseThrow(() -> new IllegalArgumentException("Invalid visit auth request id"));
+        visitAuthTxRequestService.authenticateVisitAuthRequest(visitAuthRequest);
     }
 }
