@@ -1,6 +1,6 @@
 package com.example.reportservice.entity;
 
-import com.example.reportservice.converter.StoredFileUrlConverter;
+import com.example.reportservice.common.converter.StoredFileUrlConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
