@@ -2,9 +2,7 @@ package com.example.userservice.controller;
 
 import com.example.userservice.dto.PointResponseDTO;
 import com.example.userservice.dto.ProfileResponseDTO;
-import com.example.userservice.entity.User;
 import com.example.userservice.service.UserService;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
