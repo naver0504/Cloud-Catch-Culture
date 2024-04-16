@@ -21,17 +21,17 @@ public class OAuthAttributes {
         this.oAuth2UserInfo = oAuth2UserInfo;
     }
 
-    public static OAuthAttributes of(SocialType socialType,
-                                     String userNameAttributeName, Map<String, Object> attributes) {
+    public static OAuthAttributes of(final SocialType socialType,
+                                     final String userNameAttributeName, final Map<String, Object> attributes) {
 
         return OAuthAttributes.builder()
                 .nameAttributeKey(userNameAttributeName)
-                .oAuth2UserInfo(socialType.toOAuth2UserInfo(attributes))
+                .oAuth2UserInfo(socialType.getOAuth2UserInfo(attributes))
                 .build();
 
     }
 
-    public User toEntity(SocialType socialType, OAuth2UserInfo oauth2UserInfo) {
+    public User toEntity(final SocialType socialType, final OAuth2UserInfo oauth2UserInfo) {
         return User.builder()
                 .socialType(socialType)
                 .email(oauth2UserInfo.getEmail())

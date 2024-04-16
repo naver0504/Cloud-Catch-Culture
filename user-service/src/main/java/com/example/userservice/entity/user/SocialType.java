@@ -4,29 +4,26 @@ import com.example.userservice.security.oauth2.userinfo.GoogleOAuth2UserInfo;
 import com.example.userservice.security.oauth2.userinfo.KakaoOAuth2UserInfo;
 import com.example.userservice.security.oauth2.userinfo.NaverOAuth2UserInfo;
 import com.example.userservice.security.oauth2.userinfo.OAuth2UserInfo;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 import java.util.Map;
+import java.util.function.Function;
 
+@Getter
+@RequiredArgsConstructor
 public enum SocialType {
-    KAKAO{
-        public OAuth2UserInfo toOAuth2UserInfo(Map<String, Object> attributes) {
-            return new KakaoOAuth2UserInfo(attributes);
-        }
-    },
-    NAVER{
-        public OAuth2UserInfo toOAuth2UserInfo(Map<String, Object> attributes) {
-            return new NaverOAuth2UserInfo(attributes);
-        }
-    },
-    GOOGLE {
-        public OAuth2UserInfo toOAuth2UserInfo(Map < String, Object > attributes){
-            return new GoogleOAuth2UserInfo(attributes);
-        }
-    };
 
+    KAKAO(attributes -> new KakaoOAuth2UserInfo(attributes)),
+    NAVER(attributes -> new NaverOAuth2UserInfo(attributes)),
+    GOOGLE(attributes -> new GoogleOAuth2UserInfo(attributes));
 
-    public abstract OAuth2UserInfo toOAuth2UserInfo(Map<String, Object> attributes);
+    private final Function<Map<String, Object>, OAuth2UserInfo> fuction;
+
+    public OAuth2UserInfo getOAuth2UserInfo(Map<String, Object> attributes) {
+        return fuction.apply(attributes);
+    }
 
     public static SocialType of(String socialType) {
         return Arrays.stream(SocialType.values())
