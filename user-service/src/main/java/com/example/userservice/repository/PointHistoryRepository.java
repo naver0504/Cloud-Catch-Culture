@@ -14,9 +14,7 @@ public interface PointHistoryRepository extends JpaRepository<PointHistory, Inte
     @Modifying
     void deleteByMessageId(long messageId);
 
-    Optional<PointHistory> findByMessageId(long messageId);
-
-    @Query("select u from PointHistory ph inner join User u on u.id = ph.user.id where ph.user.id = :userId and  ph.messageId = :messageId")
+    @Query("select ph from PointHistory ph where ph.user.id = :userId and  ph.messageId = :messageId")
     Optional<PointHistory> findByUserIdAndPointHistoryMessageId(long userId, long messageId);
 
 }
