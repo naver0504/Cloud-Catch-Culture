@@ -1,19 +1,20 @@
 package com.example.eventservice.entity.interaction;
 
 import com.example.eventservice.repository.event.CulturalEventRepository;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.TriConsumer;
 
-import java.util.function.Consumer;
-
+@Getter
+@RequiredArgsConstructor
 public enum LikeStar {
 
-    LIKE,
-    STAR;
+    LIKE((culturalEventRepository, culturalEventId, count) -> culturalEventRepository.updateLikeCount(culturalEventId, count)),
+    STAR((culturalEventRepository, culturalEventId, count) -> culturalEventRepository.updateStarCount(culturalEventId, count));
 
+    private final TriConsumer<CulturalEventRepository, Integer, Integer> updateCountMethod;
 
-    public static Consumer<CulturalEventRepository> getUpdateCountMethod(final LikeStar likeStar, final  int culturalEventId, final int count) {
-        return switch (likeStar) {
-            case LIKE -> (culturalEventRepository) -> culturalEventRepository.updateLikeCount(culturalEventId, count);
-            case STAR -> (culturalEventRepository) -> culturalEventRepository.updateStarCount(culturalEventId, count);
-        };
+    public void updateCount(final CulturalEventRepository culturalEventRepository, final int culturalEventId, final int count) {
+        this.getUpdateCountMethod().accept(culturalEventRepository, culturalEventId, count);
     }
 }

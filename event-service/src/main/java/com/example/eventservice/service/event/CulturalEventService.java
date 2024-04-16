@@ -68,7 +68,7 @@ public class CulturalEventService {
 
         culturalEventRepository.findByIdForUpdate(culturalEventId).orElseThrow(() -> new IllegalStateException("Cultural event does not exist"));
         interactionService.saveLikeStar(culturalEventId, userId, likeStar);
-        getUpdateCountMethod(likeStar, culturalEventId, PLUS_COUNT).accept(culturalEventRepository);
+        likeStar.updateCount(culturalEventRepository, culturalEventId, PLUS_COUNT);
     }
 
 
@@ -84,8 +84,7 @@ public class CulturalEventService {
 
         culturalEventRepository.findByIdForUpdate(culturalEventId).orElseThrow(() -> new IllegalStateException("Cultural event does not exist"));
         interactionService.deleteLikeStar(culturalEventId, userId, likeStar);
-        getUpdateCountMethod(likeStar, culturalEventId, MINUS_COUNT).accept(culturalEventRepository);
-
+        likeStar.updateCount(culturalEventRepository, culturalEventId, MINUS_COUNT);
     }
 
     public CulturalEventDetail existsCulturalEvent(final int culturalEventId) {
