@@ -23,18 +23,20 @@ public enum Category {
 
     private final String code;
 
-
-    public static final List<Category> allOfCategory = Arrays.asList(Category.values());
-
     Category(String code) {
         this.code = code;
     }
+
     public String getCode() {
         return code;
     }
 
+    public static List<Category> getAllOfCategory() {
+        return Arrays.asList(Category.values());
+    }
+
     public static Category of(final String code) {
-        return allOfCategory.stream()
+        return getAllOfCategory().stream()
                 .filter(category -> category.getCode().contains(code))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Invalid Category"));

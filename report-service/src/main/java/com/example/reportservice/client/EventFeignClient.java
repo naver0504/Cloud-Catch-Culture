@@ -1,5 +1,6 @@
 package com.example.reportservice.client;
 
+import com.example.reportservice.common.constant.CulturalEventDetail;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,5 +10,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface EventFeignClient {
 
     @GetMapping("/cultural-event/{culturalEventId}/visit-auth")
-    ResponseEntity<Boolean> existsCulturalEvent(final @PathVariable int culturalEventId);
+    ResponseEntity<CulturalEventDetail> getCulturalEventDetail(final @PathVariable int culturalEventId);
 }

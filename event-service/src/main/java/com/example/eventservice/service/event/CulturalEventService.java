@@ -4,6 +4,8 @@ import com.example.eventservice.common.type.SortType;
 import com.example.eventservice.dto.CulturalEventDetailsResponseDTO;
 import com.example.eventservice.dto.EventResponseDTO;
 import com.example.eventservice.entity.event.Category;
+import com.example.eventservice.entity.event.CulturalEvent;
+import com.example.eventservice.entity.event.CulturalEventDetail;
 import com.example.eventservice.entity.interaction.LikeStar;
 import com.example.eventservice.repository.event.CulturalEventQueryRepository;
 import com.example.eventservice.repository.event.CulturalEventRepository;
@@ -66,7 +68,7 @@ public class CulturalEventService {
 
         culturalEventRepository.findByIdForUpdate(culturalEventId).orElseThrow(() -> new IllegalStateException("Cultural event does not exist"));
         interactionService.saveLikeStar(culturalEventId, userId, likeStar);
-        getUpdateCountMethod(likeStar, culturalEventId, PLUS_COUNT).accept(culturalEventRepository);
+        likeStar.updateCount(culturalEventRepository, culturalEventId, PLUS_COUNT);
     }
 
 
@@ -82,11 +84,12 @@ public class CulturalEventService {
 
         culturalEventRepository.findByIdForUpdate(culturalEventId).orElseThrow(() -> new IllegalStateException("Cultural event does not exist"));
         interactionService.deleteLikeStar(culturalEventId, userId, likeStar);
-        getUpdateCountMethod(likeStar, culturalEventId, MINUS_COUNT).accept(culturalEventRepository);
-
+        likeStar.updateCount(culturalEventRepository, culturalEventId, MINUS_COUNT);
     }
 
-    public boolean existsCulturalEvent(final int culturalEventId) {
-        return culturalEventQueryRepository.existsCulturalEvent(culturalEventId);
+    public CulturalEventDetail existsCulturalEvent(final int culturalEventId) {
+        final CulturalEvent culturalEvent = culturalEventRepository.findById(culturalEventId).orElse(null);
+        return culturalEvent == null ? null : culturalEvent.getCulturalEventDetail();
+
     }
 }

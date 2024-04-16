@@ -20,8 +20,6 @@ public class VisitAuth {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    private boolean isAuthenticated;
-
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
@@ -34,6 +32,7 @@ public class VisitAuth {
     @PrePersist
     public void prePersist() {
         this.createdAt = LocalDateTime.now();
-        this.isAuthenticated = false;
     }
+
+
 }

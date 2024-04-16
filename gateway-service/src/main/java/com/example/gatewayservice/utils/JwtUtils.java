@@ -21,6 +21,7 @@ public class JwtUtils {
     private SecretKey secretKey;
     private final String PREFIX = "Bearer ";
     public static String USER_ID = "userId";
+    public static String ROLE = "role";
 
 
     @PostConstruct
@@ -48,6 +49,10 @@ public class JwtUtils {
 
     public Long getUserIdFromClaims(Jws<Claims> claims) {
         return claims.getBody().get(USER_ID, Long.class);
+    }
+
+    public String getRoleFromClaims(Jws<Claims> claims) {
+        return claims.getBody().get(ROLE, String.class);
     }
 
     private String subtractPrefix(final String token) {

@@ -4,6 +4,7 @@ import com.example.eventservice.common.type.SortType;
 import com.example.eventservice.dto.CulturalEventDetailsResponseDTO;
 import com.example.eventservice.dto.EventResponseDTO;
 import com.example.eventservice.entity.event.Category;
+import com.example.eventservice.entity.event.CulturalEventDetail;
 import com.example.eventservice.entity.interaction.LikeStar;
 import com.example.eventservice.service.event.CulturalEventService;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +59,7 @@ public class CulturalEventController {
      *
      */
     @GetMapping("{culturalEventId}/visit-auth")
-    public ResponseEntity<Boolean> requestVisitAuth(final @PathVariable int culturalEventId) {
+    public ResponseEntity<CulturalEventDetail> requestVisitAuth(final @PathVariable int culturalEventId) {
         return ResponseEntity.status(HttpStatus.OK).body(culturalEventService.existsCulturalEvent(culturalEventId));
     }
 

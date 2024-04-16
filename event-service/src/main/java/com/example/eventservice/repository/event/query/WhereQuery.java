@@ -30,7 +30,7 @@ public final class WhereQuery {
 
     public static BooleanExpression categoryIn(List<Category> categoryList) {
         if(categoryList == null) {
-            categoryList = Category.allOfCategory;
+            categoryList = Category.getAllOfCategory();
         }
         return culturalEvent.culturalEventDetail.category.in(categoryList);
     }

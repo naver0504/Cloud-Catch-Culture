@@ -48,6 +48,11 @@ dependencies {
     // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-aws-context
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-aws-context', version: '2.2.6.RELEASE'
 
+    //kafka
+    implementation 'org.springframework.kafka:spring-kafka'
+
+
+
 }
 
 dependencyManagement {
