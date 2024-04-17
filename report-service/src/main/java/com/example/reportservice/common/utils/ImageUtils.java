@@ -52,4 +52,8 @@ public final class ImageUtils {
             default -> "jpg";
         };
     }
+
+    public static String getImageFileUrlFromStoredFileUrl(final String storedFileUrl) {
+        return storedFileUrl.split("/")[storedFileUrl.split("/").length - 1];
+    }
 }
