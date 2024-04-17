@@ -3,7 +3,7 @@ package com.example.reportservice.repository.visit_auth.query;
 import com.example.reportservice.common.constant.VisitAuthConstant;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
-import static com.example.reportservice.entity.QVisitAuthRequest.visitAuthRequest;
+import static com.example.reportservice.entity.visit_auth.QVisitAuthRequest.visitAuthRequest;
 
 public final class WhereQuery {
 

@@ -1,6 +1,7 @@
-package com.example.reportservice.entity;
+package com.example.reportservice.entity.visit_auth;
 
 import com.example.reportservice.common.converter.StoredFileUrlConverter;
+import com.example.reportservice.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class VisitAuthRequest {
+public class VisitAuthRequest extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,14 +32,7 @@ public class VisitAuthRequest {
     @Column(nullable = false)
     private int culturalEventId;
 
-    private LocalDateTime createdAt;
 
     private boolean isAuthenticated;
-
-
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = LocalDateTime.now();
-    }
 
 }
