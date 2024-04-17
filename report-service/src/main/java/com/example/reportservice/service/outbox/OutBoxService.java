@@ -1,45 +1,38 @@
 package com.example.reportservice.service.outbox;
 
-import com.example.reportservice.entity.VisitAuthRequest;
-import com.example.reportservice.entity.message.OutBox;
-import com.example.reportservice.entity.message.EventType;
+import com.example.reportservice.common.utils.OutBoxUtils;
+import com.example.reportservice.entity.BaseEntity;
+import com.example.reportservice.entity.outbox.OutBox;
 import com.example.reportservice.kafka.message.BaseMessage;
-import com.example.reportservice.kafka.message.VisitAuthMessage;
 import com.example.reportservice.repository.outbox.OutBoxRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class OutBoxService {
 
     private final OutBoxRepository outBoxRepository;
     private final ObjectMapper objectMapper;
 
 
-    public void createMessage(Object content)  {
+    public <T extends BaseEntity> void createMessage(final T content)  {
 
-        final EventType messageType = EventType.of(content.getClass());
-        final VisitAuthMessage messageContent = VisitAuthMessage.from((VisitAuthRequest) content);
+        final BaseMessage baseMessage = OutBoxUtils.convertToBaseMessage(content);
+        final String payload = OutBoxUtils.getPayload(baseMessage, objectMapper);
 
-        final OutBox message = OutBox.builder()
-                .eventType(messageType)
-                .payload(getPayload(messageContent))
+        final OutBox outbox = OutBox.builder()
+                .eventType(baseMessage.getEventType())
+                .payload(payload)
                 .build();
 
-        outBoxRepository.save(message);
+        outBoxRepository.save(outbox);
     }
 
 
-    private <T extends BaseMessage> String getPayload(final T content) {
-        try {
-            return objectMapper.writeValueAsString(content);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error while serializing object to JSON");
-        }
-    }
 }

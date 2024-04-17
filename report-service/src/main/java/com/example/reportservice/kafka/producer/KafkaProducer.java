@@ -1,6 +1,6 @@
 package com.example.reportservice.kafka.producer;
 
-import com.example.reportservice.entity.message.OutBox;
+import com.example.reportservice.entity.outbox.OutBox;
 import com.example.reportservice.kafka.KafkaConstant;
 import com.example.reportservice.kafka.KafkaService;
 import com.example.reportservice.repository.outbox.OutBoxRepository;

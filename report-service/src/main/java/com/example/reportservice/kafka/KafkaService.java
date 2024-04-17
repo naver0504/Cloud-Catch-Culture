@@ -1,6 +1,6 @@
 package com.example.reportservice.kafka;
 
-import com.example.reportservice.entity.message.OutBox;
+import com.example.reportservice.entity.outbox.OutBox;
 import com.example.reportservice.repository.outbox.OutBoxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
