@@ -1,6 +1,6 @@
 package com.example.reportservice.client;
 
-import com.example.reportservice.common.constant.CulturalEventDetail;
+import com.example.reportservice.entity.event_report.CulturalEventDetail;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
