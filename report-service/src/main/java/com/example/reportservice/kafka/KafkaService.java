@@ -22,6 +22,4 @@ public class KafkaService {
         kafkaTemplate.send(topic, outBox.getPayload());
         messageRepository.deleteById(outBox.getId());
     }
-
-
 }
