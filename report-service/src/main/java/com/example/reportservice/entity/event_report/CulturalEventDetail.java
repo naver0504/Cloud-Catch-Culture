@@ -31,9 +31,9 @@ public class CulturalEventDetail {
     @Column(nullable = false)
     private LocalDateTime endDate;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String title;
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String place;
 
     @Enumerated(EnumType.STRING)
