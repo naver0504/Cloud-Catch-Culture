@@ -6,8 +6,10 @@ import com.example.reportservice.entity.outbox.EventType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
+@AllArgsConstructor(access = lombok.AccessLevel.PRIVATE)
+@NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 @Builder
 @Getter
 public class EventReportMessage extends BaseMessage{

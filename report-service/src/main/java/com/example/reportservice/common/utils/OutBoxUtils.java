@@ -25,4 +25,12 @@ public final class OutBoxUtils {
             throw new RuntimeException("Error while serializing object to JSON");
         }
     }
+
+    public static <T extends BaseMessage> T convertToBaseMessage(final String message, final Class<T> clazz, final ObjectMapper objectMapper) {
+        try {
+            return objectMapper.readValue(message, clazz);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to convert message to " + clazz.getSimpleName(), e);
+        }
+    }
 }

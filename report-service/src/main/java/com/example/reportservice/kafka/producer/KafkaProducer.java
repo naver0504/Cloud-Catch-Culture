@@ -1,7 +1,7 @@
 package com.example.reportservice.kafka.producer;
 
+import com.example.reportservice.entity.outbox.EventType;
 import com.example.reportservice.entity.outbox.OutBox;
-import com.example.reportservice.kafka.KafkaConstant;
 import com.example.reportservice.kafka.KafkaService;
 import com.example.reportservice.repository.outbox.OutBoxRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +10,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+import static com.example.reportservice.kafka.KafkaConstant.CREATE_EVENT_REPORT;
+import static com.example.reportservice.kafka.KafkaConstant.CREATE_VISIT_AUTH;
 
 @RequiredArgsConstructor
 @Component
@@ -26,7 +29,11 @@ public class KafkaProducer {
         final List<OutBox> outBoxes = outBoxRepository.findAll();
 
         for (final OutBox message : outBoxes) {
-            kafkaService.sendMessage(KafkaConstant.CREATE_VISIT_AUTH, message);
+            final EventType eventType = message.getEventType();
+            switch (eventType.getKafkaTopic()) {
+                case CREATE_VISIT_AUTH -> kafkaService.sendMessage(CREATE_VISIT_AUTH, message);
+                case CREATE_EVENT_REPORT -> kafkaService.sendMessage(CREATE_EVENT_REPORT, message);
+            }
         }
     }
 }
