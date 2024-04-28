@@ -24,7 +24,6 @@ public class KafkaConsumer {
     @Transactional
     public void consumeCreateVisitAuth(final String message) {
 
-        log.info("Consuming message: {}", message);
         final VisitAuthMessage visitAuthMessage = convertToVisitAuthMessage(message);
 
         if(visitAuthRepository.findByUserIdAndCulturalEventId(visitAuthMessage.getUserId(), visitAuthMessage.getCulturalEventId()).isPresent()) {
@@ -37,7 +36,6 @@ public class KafkaConsumer {
     @KafkaListener(topics = KafkaConstant.ROLLBACK_VISIT_AUTH, groupId = KafkaConstant.GROUP_ID)
     @Transactional
     public void consumeRollbackVisitAuth(final String message) {
-        log.info("Consuming message: {}", message);
         final VisitAuthMessage visitAuthMessage = convertToVisitAuthMessage(message);
         visitAuthRepository.deleteByUserIdAndEventId(visitAuthMessage.getUserId(), visitAuthMessage.getCulturalEventId());
     }
