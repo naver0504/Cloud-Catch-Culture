@@ -2,33 +2,17 @@ package com.example.eventservice.kafka.message;
 
 import com.example.eventservice.entity.event.CulturalEvent;
 import com.example.eventservice.entity.visitauth.VisitAuth;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import lombok.*;
 
-@Getter
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
-@ToString
+@Getter
 public class VisitAuthMessage extends BaseMessage{
-    private long userId;
-    private int culturalEventId;
 
     public VisitAuth toEntity() {
         return VisitAuth.builder()
-                .userId(userId)
-                .culturalEvent(CulturalEvent.createCulturalEvent(culturalEventId))
+                .userId(getUserId())
+                .culturalEvent(CulturalEvent.createCulturalEvent(getCulturalEventId()))
                 .build();
-    }
-
-    public String toString(final ObjectMapper objectMapper) {
-        try {
-            return objectMapper.writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

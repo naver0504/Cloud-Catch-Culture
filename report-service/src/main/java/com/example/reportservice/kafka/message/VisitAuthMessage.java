@@ -13,15 +13,16 @@ import lombok.NoArgsConstructor;
 @Getter
 public class VisitAuthMessage extends BaseMessage {
 
-    private long userId;
     private int culturalEventId;
 
-
     public static VisitAuthMessage from(final VisitAuthRequest visitAuthRequest) {
-        return VisitAuthMessage.builder()
-                .userId(visitAuthRequest.getUserId())
+        final VisitAuthMessage visitAuthMessage = VisitAuthMessage.builder()
                 .culturalEventId(visitAuthRequest.getCulturalEventId())
                 .build();
+
+        visitAuthMessage.setBaseMessage(visitAuthRequest.getUserId());
+
+        return visitAuthMessage;
     }
 
     @Override
