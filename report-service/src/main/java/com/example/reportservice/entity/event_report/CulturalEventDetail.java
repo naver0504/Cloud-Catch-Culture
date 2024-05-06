@@ -1,6 +1,7 @@
 package com.example.reportservice.entity.event_report;
 
 import com.example.reportservice.common.converter.StoredFileUrlConverter;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,7 +25,7 @@ public class CulturalEventDetail {
 
     @Column(nullable = false, columnDefinition = "TEXT")
     @Convert(converter = StoredFileUrlConverter.class)
-    private List<String> storedFileUrl;
+    private List<String> storedImageUrl;
 
     @Column(nullable = false)
     private LocalDateTime startDate;
@@ -53,6 +55,12 @@ public class CulturalEventDetail {
     private String sns;
     private String telephone;
     private Boolean isFree;
+
+    @PrePersist
+    public void prePersist() {
+        startDate = LocalDateTime.of(startDate.getYear(), startDate.getMonth(), startDate.getDayOfMonth(), startDate.getHour(), startDate.getMinute(), 0);
+        endDate = LocalDateTime.of(endDate.getYear(), endDate.getMonth(), endDate.getDayOfMonth(), endDate.getHour(), endDate.getMinute(), 0);
+    }
 
     public static Point createGeography(final Double latitude, final Double longitude) {
         if(longitude.equals(-200D) && latitude.equals(-200D)) {
