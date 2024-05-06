@@ -24,10 +24,11 @@ public class CulturalEventDetail {
     @Convert(converter = StoredImageUrlConverter.class)
     private List<String> storedImageUrl;
     @Column(nullable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss", timezone="Asia/Seoul")
     private LocalDateTime startDate;
+
     @Column(nullable = false)
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss", timezone="Asia/Seoul")
     private LocalDateTime endDate;
     @Column(nullable = false)
     private String title;
@@ -51,6 +52,12 @@ public class CulturalEventDetail {
     private String sns;
     private String telephone;
     private Boolean isFree;
+
+    @PrePersist
+    public void prePersist() {
+        startDate = LocalDateTime.of(startDate.getYear(), startDate.getMonth(), startDate.getDayOfMonth(), startDate.getHour(), startDate.getMinute(), 0);
+        endDate = LocalDateTime.of(endDate.getYear(), endDate.getMonth(), endDate.getDayOfMonth(), endDate.getHour(), endDate.getMinute(), 0);
+    }
 
     public static Point createGeography(final Double latitude, final Double longitude) {
         if(longitude.equals(-200D) && latitude.equals(-200D)) {

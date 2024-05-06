@@ -1,6 +1,6 @@
 package com.example.reportservice.repository.visit_auth;
 
-import com.example.reportservice.entity.VisitAuthRequest;
+import com.example.reportservice.entity.visit_auth.VisitAuthRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

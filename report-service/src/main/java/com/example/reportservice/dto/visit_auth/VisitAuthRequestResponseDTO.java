@@ -1,4 +1,4 @@
-package com.example.reportservice.dto;
+package com.example.reportservice.dto.visit_auth;
 
 
 import lombok.AllArgsConstructor;

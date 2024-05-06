@@ -1,7 +1,7 @@
 package com.example.reportservice.repository.visit_auth;
 
 import com.example.reportservice.common.constant.VisitAuthConstant;
-import com.example.reportservice.dto.VisitAuthRequestResponseDTO;
+import com.example.reportservice.dto.visit_auth.VisitAuthRequestResponseDTO;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.example.reportservice.entity.QVisitAuthRequest.visitAuthRequest;
+import static com.example.reportservice.entity.visit_auth.QVisitAuthRequest.visitAuthRequest;
 import static com.example.reportservice.repository.visit_auth.query.WhereQuery.*;
 
 @Repository

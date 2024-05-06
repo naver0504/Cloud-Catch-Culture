@@ -12,6 +12,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class AdminUserAspect {
 
     private final String ADMIN_ROLE = "ADMIN";
+    private final String ROLE = "role";
 
 
     @Before("@annotation(com.example.reportservice.common.aop.AdminUser)")
@@ -28,7 +29,7 @@ public class AdminUserAspect {
     }
 
     private String getUserRole(HttpServletRequest request) {
-        return request.getHeader("role");
+        return request.getHeader(ROLE);
     }
 
     private HttpServletRequest getHttpServletRequest() {

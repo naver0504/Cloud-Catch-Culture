@@ -1,15 +1,15 @@
 package com.example.reportservice.service.visit_auth;
 
 import com.example.reportservice.client.EventFeignClient;
-import com.example.reportservice.common.constant.CulturalEventDetail;
+import com.example.reportservice.entity.event_report.CulturalEventDetail;
 import com.example.reportservice.common.constant.VisitAuthConstant;
 import com.example.reportservice.common.utils.ImageUtils;
-import com.example.reportservice.dto.VisitAuthRequestDetailDTO;
-import com.example.reportservice.dto.VisitAuthRequestResponseDTO;
-import com.example.reportservice.entity.VisitAuthRequest;
+import com.example.reportservice.dto.visit_auth.VisitAuthRequestDetailDTO;
+import com.example.reportservice.dto.visit_auth.VisitAuthRequestResponseDTO;
+import com.example.reportservice.entity.visit_auth.VisitAuthRequest;
 import com.example.reportservice.repository.visit_auth.VisitAuthRequestQueryRepository;
 import com.example.reportservice.repository.visit_auth.VisitAuthRequestRepository;
-import com.example.reportservice.service.S3Service;
+import com.example.reportservice.service.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -52,8 +52,6 @@ public class VisitAuthRequestService {
                 .build();
 
         visitAuthTxRequestService.createVisitAuthRequest(visitAuthRequest);
-
-
     }
 
     public Slice<VisitAuthRequestResponseDTO> getVisitAuthRequestList(final int lastId, final VisitAuthConstant visitAuthConstant) {

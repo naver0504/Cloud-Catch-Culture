@@ -1,7 +1,7 @@
 package com.example.reportservice.kafka.producer;
 
-import com.example.reportservice.entity.message.OutBox;
-import com.example.reportservice.kafka.KafkaConstant;
+import com.example.reportservice.entity.outbox.EventType;
+import com.example.reportservice.entity.outbox.OutBox;
 import com.example.reportservice.kafka.KafkaService;
 import com.example.reportservice.repository.outbox.OutBoxRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,14 +19,12 @@ public class KafkaProducer {
     private final KafkaService kafkaService;
     private final OutBoxRepository outBoxRepository;
 
-    @Scheduled(fixedRate = 5000) // 5 seconds
+    @Scheduled(fixedRate = 10000) // 10 seconds
     public void sendOutBoxMessage() {
-
-        log.info("Sending outbox messages to kafka");
         final List<OutBox> outBoxes = outBoxRepository.findAll();
-
         for (final OutBox message : outBoxes) {
-            kafkaService.sendMessage(KafkaConstant.CREATE_VISIT_AUTH, message);
+            final EventType eventType = message.getEventType();
+            kafkaService.sendMessage(eventType.getTopic(), message);
         }
     }
 }

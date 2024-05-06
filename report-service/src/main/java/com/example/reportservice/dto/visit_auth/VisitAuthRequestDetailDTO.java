@@ -1,7 +1,7 @@
-package com.example.reportservice.dto;
+package com.example.reportservice.dto.visit_auth;
 
-import com.example.reportservice.common.constant.CulturalEventDetail;
-import com.example.reportservice.entity.VisitAuthRequest;
+import com.example.reportservice.entity.event_report.CulturalEventDetail;
+import com.example.reportservice.entity.visit_auth.VisitAuthRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,11 +15,9 @@ import java.util.List;
 public class VisitAuthRequestDetailDTO {
     private CulturalEventDetail culturalEventDetail;
 
-
     private int id;
     private LocalDateTime createdAt;
     private boolean isAuthenticated;
-    private List<String> storedFileUrl;
 
     public static VisitAuthRequestDetailDTO of(final VisitAuthRequest visitAuthRequest, final CulturalEventDetail culturalEventDetail) {
         return VisitAuthRequestDetailDTO.builder()
@@ -27,7 +25,6 @@ public class VisitAuthRequestDetailDTO {
                 .createdAt(visitAuthRequest.getCreatedAt())
                 .isAuthenticated(visitAuthRequest.isAuthenticated())
                 .culturalEventDetail(culturalEventDetail)
-                .storedFileUrl(visitAuthRequest.getStoredFileUrl())
                 .build();
     }
 }

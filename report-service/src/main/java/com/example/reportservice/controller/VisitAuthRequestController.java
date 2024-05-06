@@ -2,8 +2,8 @@ package com.example.reportservice.controller;
 
 import com.example.reportservice.common.aop.AdminUser;
 import com.example.reportservice.common.constant.VisitAuthConstant;
-import com.example.reportservice.dto.VisitAuthRequestDetailDTO;
-import com.example.reportservice.dto.VisitAuthRequestResponseDTO;
+import com.example.reportservice.dto.visit_auth.VisitAuthRequestDetailDTO;
+import com.example.reportservice.dto.visit_auth.VisitAuthRequestResponseDTO;
 import com.example.reportservice.service.visit_auth.VisitAuthRequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
