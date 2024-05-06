@@ -3,25 +3,26 @@ package com.example.reportservice.kafka.message;
 import com.example.reportservice.entity.event_report.CulturalEventDetail;
 import com.example.reportservice.entity.event_report.EventReport;
 import com.example.reportservice.entity.outbox.EventType;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
 
 @AllArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 @Builder
 @Getter
+@ToString
 public class EventReportMessage extends BaseMessage{
 
-    private long userId;
     private CulturalEventDetail culturalEventDetail;
 
     public static EventReportMessage from(final EventReport eventReport) {
-        return EventReportMessage.builder()
-                .userId(eventReport.getUserId())
+        final EventReportMessage eventReportMessage = EventReportMessage.builder()
                 .culturalEventDetail(eventReport.getCulturalEventDetail())
                 .build();
+
+        eventReportMessage.setBaseMessage(eventReport.getUserId());
+
+        return eventReportMessage;
     }
 
     @Override
