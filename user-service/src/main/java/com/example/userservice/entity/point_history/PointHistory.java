@@ -24,13 +24,11 @@ public class PointHistory {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private long messageId;
+    @Column(nullable = false)
+    private int culturalEventId;
 
-
-    @Column(columnDefinition = "TEXT")
-    private String description;
-
-    private int pointChange;
+    @Enumerated(EnumType.STRING)
+    private PointChange pointChange;
 
     private LocalDateTime createdAt;
 
