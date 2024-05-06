@@ -19,7 +19,7 @@ public class EventReportTxService {
 
     @Transactional
     public void createEventReport(final EventReport eventReport) {
-        applicationEventPublisher.publishEvent(new S3Event(eventReport.getCulturalEventDetail().getStoredFileUrl()));
+        applicationEventPublisher.publishEvent(new S3Event(eventReport.getCulturalEventDetail().getStoredImageUrl()));
         eventReportRepository.save(eventReport);
     }
 
