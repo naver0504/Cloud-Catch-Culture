@@ -40,9 +40,9 @@ public class EventReportRequestDTO {
         return true;
     }
 
-    public CulturalEventDetail toCulturalEventDetail(List<String> storedFileUrl) {
+    public CulturalEventDetail toCulturalEventDetail(List<String> storedImageUrl) {
         return CulturalEventDetail.builder()
-                .storedFileUrl(storedFileUrl)
+                .storedImageUrl(storedImageUrl)
                 .startDate(startDate)
                 .endDate(endDate)
                 .title(title)
