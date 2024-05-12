@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
@@ -26,11 +25,7 @@ class CulturalEventServiceTestWithBoot {
     @Autowired
     CulturalEventRepository culturalEventRepository;
 
-    /***
-     *
-     * 비동기 처리이기 때문에 Transactional을 사용해도 rollback이 되지 않는다.
-     * @throws InterruptedException
-     */
+
     @Test
     @Transactional
     void createInteractionTest() throws InterruptedException {
@@ -43,9 +38,7 @@ class CulturalEventServiceTestWithBoot {
 
         for (int i = 0; i < numOfThread; i++) {
             try {
-                executorService.execute(() -> {
-                    culturalEventService.createInteraction(culturalEventId, 1, LikeStar.LIKE);
-                });
+                executorService.execute(() -> culturalEventService.createInteraction(culturalEventId, 1, LikeStar.LIKE));
 
             }finally {
 

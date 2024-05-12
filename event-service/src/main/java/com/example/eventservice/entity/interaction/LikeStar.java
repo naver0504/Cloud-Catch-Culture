@@ -1,12 +1,10 @@
 package com.example.eventservice.entity.interaction;
 
-import com.example.eventservice.entity.event.CulturalEvent;
 import com.example.eventservice.repository.event.CulturalEventRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.TriConsumer;
 
-import java.util.function.Consumer;
 
 @Getter
 @RequiredArgsConstructor
