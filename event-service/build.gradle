@@ -48,6 +48,9 @@ dependencies {
     // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-aws-context
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-aws-context', version: '2.2.6.RELEASE'
 
+    implementation 'org.redisson:redisson-spring-boot-starter:3.17.0'
+
+
     //kafka
     implementation 'org.springframework.kafka:spring-kafka'
 
