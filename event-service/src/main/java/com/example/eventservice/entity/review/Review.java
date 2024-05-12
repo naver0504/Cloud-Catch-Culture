@@ -1,4 +1,4 @@
-package com.example.eventservice.entity;
+package com.example.eventservice.entity.review;
 
 import com.example.eventservice.common.converter.StoredImageUrlConverter;
 import com.example.eventservice.entity.event.CulturalEvent;
