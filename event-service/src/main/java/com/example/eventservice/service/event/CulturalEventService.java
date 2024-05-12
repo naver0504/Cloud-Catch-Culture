@@ -7,6 +7,7 @@ import com.example.eventservice.entity.event.Category;
 import com.example.eventservice.entity.event.CulturalEvent;
 import com.example.eventservice.entity.event.CulturalEventDetail;
 import com.example.eventservice.entity.interaction.LikeStar;
+import com.example.eventservice.redis.DistributedLock;
 import com.example.eventservice.repository.event.CulturalEventQueryRepository;
 import com.example.eventservice.repository.event.CulturalEventRepository;
 import com.example.eventservice.service.interaction.InteractionService;
@@ -62,13 +63,20 @@ public class CulturalEventService {
      * 그 후 updateLikeCount에서 해당 culturalEvent에 update를 위해 x-lock을 획득해야하지만
      * 동시에 요청한 다른 트랜잭션에서 s-lock을 가지고 있으므로 x-lock을 획득하지 못하고 대기하게 된다. (x-lock은 다른 트랜잭션에서 s-lock이나 x-lock을 가지고 있을 때 획득 X)
      * 따라서 데드락이 발생한다.
+     *
+     * xlock은 db에 부하를 주기 때문에 redisson을 사용하여 동시성 문제를 해결하기로 함.
+     * xlcok을 사용할 시 커넥션을 가진 상태로 대기하기 때문에 redisson으로 커넥션을 가지기 전 lock을 확득해야지만
+     * db에 접근하도록 하여 데드락을 방지할 수 있다.
      */
-    @Transactional
+    @DistributedLock(key = "#culturalEventId+':'+#userId+':'+#likeStar")
     public void createInteraction(final int culturalEventId, final long userId, final LikeStar likeStar) {
 
-        culturalEventRepository.findByIdForUpdate(culturalEventId).orElseThrow(() -> new IllegalStateException("Cultural event does not exist"));
+        if(culturalEventQueryRepository.existsCulturalEvent(culturalEventId)) {
+            throw new IllegalStateException("Cultural event does not exist");
+        }
         interactionService.saveLikeStar(culturalEventId, userId, likeStar);
         likeStar.updateCount(culturalEventRepository, culturalEventId, PLUS_COUNT);
+
     }
 
 
@@ -78,18 +86,26 @@ public class CulturalEventService {
      * 따라서 동시성 문제를 해결할 수 있다.
      * 만약 findByIdForUpdate가 아닌 단순 select로 조회한다면 동시성 문제가 발생할 수 있다.
      * 단순 select로 조회 시 100번의 동시 요청일 경우 원래는 1번만 좋아요 수가 감소해야 하지만 100번 감소한다.
+     *
+     * xlock은 db에 부하를 주기 때문에 redisson을 사용하여 동시성 문제를 해결하기로 함.
+     * xlcok을 사용할 시 커넥션을 가진 상태로 대기하기 때문에 redisson으로 커넥션을 가지기 전 lock을 확득해야지만
+     * db에 접근하도록 하여 데드락을 방지할 수 있다.
      */
-    @Transactional
+    @DistributedLock(key = "#culturalEventId")
     public void cancelInteraction(final int culturalEventId, final long userId, final LikeStar likeStar) {
 
-        culturalEventRepository.findByIdForUpdate(culturalEventId).orElseThrow(() -> new IllegalStateException("Cultural event does not exist"));
+        if(culturalEventQueryRepository.existsCulturalEvent(culturalEventId)) {
+            throw new IllegalStateException("Cultural event does not exist");
+        }
         interactionService.deleteLikeStar(culturalEventId, userId, likeStar);
         likeStar.updateCount(culturalEventRepository, culturalEventId, MINUS_COUNT);
     }
 
+
+
+
     public CulturalEventDetail existsCulturalEvent(final int culturalEventId) {
         final CulturalEvent culturalEvent = culturalEventRepository.findById(culturalEventId).orElse(null);
         return culturalEvent == null ? null : culturalEvent.getCulturalEventDetail();
-
     }
 }
