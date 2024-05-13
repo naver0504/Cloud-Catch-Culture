@@ -1,14 +1,11 @@
 package com.example.eventservice.kafka;
 
-import com.example.eventservice.kafka.message.EventReportMessage;
-import com.example.eventservice.kafka.message.VisitAuthMessage;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.example.eventservice.kafka.record.KafkaResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.event.EventListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.event.TransactionPhase;
-import org.springframework.transaction.event.TransactionalEventListener;
 
 @Component
 @RequiredArgsConstructor
@@ -16,31 +13,15 @@ import org.springframework.transaction.event.TransactionalEventListener;
 public class ApplicationEventListener {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
-    private final ObjectMapper objectMapper;
-
-    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
-    public void handleVisitAuthMessageBeforeCommit(final VisitAuthMessage visitAuthMessage) {
-        switch (visitAuthMessage.getTopic()) {
-            case KafkaConstant.ROLLBACK_EVENT_REPORT_POINT -> kafkaTemplate.send(KafkaConstant.ROLLBACK_VISIT_AUTH, visitAuthMessage.toString(objectMapper));
-            case KafkaConstant.CREATE_VISIT_AUTH -> kafkaTemplate.send(KafkaConstant.VISIT_AUTH_POINT, visitAuthMessage.toString(objectMapper));
-        }
+    @EventListener
+    public void handleSuccessResult(final KafkaResult.SuccessResult successResult) {
+        log.info("successResult: {}", successResult);
+        kafkaTemplate.send(successResult.topic(), successResult.message());
     }
 
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_ROLLBACK)
-    public void handleVisitAuthMessageAfterRollback(final VisitAuthMessage visitAuthMessage) {
-        kafkaTemplate.send(KafkaConstant.ROLLBACK_VISIT_AUTH, visitAuthMessage.toString(objectMapper));
-    }
-
-    @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
-    public void handleEventReportMessageBeforeCommit(final EventReportMessage eventReportMessage) {
-        switch (eventReportMessage.getTopic()) {
-            case KafkaConstant.ROLLBACK_EVENT_REPORT_POINT -> kafkaTemplate.send(KafkaConstant.ROLLBACK_EVENT_REPORT, eventReportMessage.toString(objectMapper));
-            case KafkaConstant.CREATE_EVENT_REPORT -> kafkaTemplate.send(KafkaConstant.EVENT_REPORT_POINT, eventReportMessage.toString(objectMapper));
-        }
-    }
-
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_ROLLBACK)
-    public void handleEventReportMessageAfterRollback(final EventReportMessage eventReportMessage) {
-        kafkaTemplate.send(KafkaConstant.ROLLBACK_EVENT_REPORT, eventReportMessage.toString(objectMapper));
+    @EventListener
+    public void handleExceptionResult(final KafkaResult.ExceptionResult rollbackResult) {
+        log.info("rollbackResult: {}", rollbackResult);
+        kafkaTemplate.send(rollbackResult.topic(), rollbackResult.message());
     }
 }
