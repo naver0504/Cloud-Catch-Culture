@@ -7,7 +7,7 @@ import com.example.eventservice.entity.event.Category;
 import com.example.eventservice.entity.event.CulturalEvent;
 import com.example.eventservice.entity.event.CulturalEventDetail;
 import com.example.eventservice.entity.interaction.LikeStar;
-import com.example.eventservice.redis.DistributedLock;
+import com.example.eventservice.common.aop.redis.DistributedLock;
 import com.example.eventservice.repository.event.CulturalEventQueryRepository;
 import com.example.eventservice.repository.event.CulturalEventRepository;
 import com.example.eventservice.service.interaction.InteractionService;
