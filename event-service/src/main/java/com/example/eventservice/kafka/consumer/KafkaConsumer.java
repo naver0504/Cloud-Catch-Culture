@@ -3,7 +3,7 @@ package com.example.eventservice.kafka.consumer;
 import com.example.eventservice.entity.event.CulturalEvent;
 import com.example.eventservice.entity.event.CulturalEventDetail;
 import com.example.eventservice.kafka.KafkaConstant;
-import com.example.eventservice.kafka.aop.KafkaTransactional;
+import com.example.eventservice.common.aop.kafka.KafkaTransactional;
 import com.example.eventservice.kafka.message.BaseMessage;
 import com.example.eventservice.kafka.message.EventReportMessage;
 import com.example.eventservice.kafka.message.VisitAuthMessage;

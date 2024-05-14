@@ -1,4 +1,4 @@
-package com.example.eventservice.kafka.aop;
+package com.example.eventservice.common.aop.kafka;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -1,4 +1,4 @@
-package com.example.eventservice.kafka.aop;
+package com.example.eventservice.common.aop.kafka;
 
 import com.example.eventservice.kafka.KafkaConstant;
 import com.example.eventservice.kafka.message.EventReportMessage;

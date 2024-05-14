@@ -1,4 +1,4 @@
-package com.example.eventservice.redis;
+package com.example.eventservice.common.aop.redis;
 
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;

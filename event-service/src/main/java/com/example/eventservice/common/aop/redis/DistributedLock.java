@@ -1,4 +1,4 @@
-package com.example.eventservice.redis;
+package com.example.eventservice.common.aop.redis;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

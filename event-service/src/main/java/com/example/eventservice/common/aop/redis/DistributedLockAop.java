@@ -1,4 +1,4 @@
-package com.example.eventservice.redis;
+package com.example.eventservice.common.aop.redis;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ public class DistributedLockAop {
     private final RedissonClient redissonClient;
     private final AopForTransaction aopForTransaction;
 
-    @Around("@annotation(com.example.eventservice.redis.DistributedLock)")
+    @Around("@annotation(com.example.eventservice.common.aop.redis.DistributedLock)")
     public Object lock(final ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();

@@ -1,4 +1,4 @@
-package com.example.eventservice.redis;
+package com.example.eventservice.common.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 

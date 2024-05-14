@@ -1,4 +1,4 @@
-package com.example.eventservice.redis;
+package com.example.eventservice.common.config;
 
 import lombok.RequiredArgsConstructor;
 import org.redisson.Redisson;
