@@ -41,6 +41,10 @@ public class Review {
 
     private boolean isDeleted;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Level level;
+
     @PrePersist
     public void prePersist() {
         this.isDeleted = false;
