@@ -10,4 +10,8 @@ public class WhereQuery {
         return visitAuth.userId.eq(userId);
     }
 
+    public static BooleanExpression visitAuthCulturalEventIdEq(final int culturalEventId) {
+        return visitAuth.culturalEvent.id.eq(culturalEventId);
+    }
+
 }
