@@ -6,8 +6,10 @@ import com.example.eventservice.kafka.KafkaConstant;
 import com.example.eventservice.common.aop.kafka.KafkaTransactional;
 import com.example.eventservice.kafka.message.BaseMessage;
 import com.example.eventservice.kafka.message.EventReportMessage;
+import com.example.eventservice.kafka.message.ReviewMessage;
 import com.example.eventservice.kafka.message.VisitAuthMessage;
 import com.example.eventservice.repository.event.CulturalEventRepository;
+import com.example.eventservice.repository.review.ReviewRepository;
 import com.example.eventservice.repository.visitauth.VisitAuthRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +25,7 @@ public class KafkaConsumer {
     private final ObjectMapper objectMapper;
     private final VisitAuthRepository visitAuthRepository;
     private final CulturalEventRepository culturalEventRepository;
+    private final ReviewRepository reviewRepository;
 
     @KafkaListener(topics = KafkaConstant.CREATE_VISIT_AUTH, groupId = KafkaConstant.GROUP_ID)
     @KafkaTransactional(successTopic = KafkaConstant.VISIT_AUTH_POINT, rollbackTopic = KafkaConstant.ROLLBACK_VISIT_AUTH)
@@ -61,6 +64,13 @@ public class KafkaConsumer {
     public void consumeRollbackEventReport(final String message) {
         final EventReportMessage eventReportMessage = convertToMessage(message, EventReportMessage.class);
         culturalEventRepository.deleteById(eventReportMessage.getCulturalEventId());
+    }
+
+    @KafkaListener(topics = KafkaConstant.ROLLBACK_REVIEW_POINT, groupId = KafkaConstant.GROUP_ID)
+    @KafkaTransactional
+    public void consumeRollbackReview(final String message) {
+        final ReviewMessage reviewMessage = convertToMessage(message, ReviewMessage.class);
+        reviewRepository.deleteByCulturalEventIdAndUserId(reviewMessage.getCulturalEventId(), reviewMessage.getUserId());
     }
 
     private <T extends BaseMessage> T convertToMessage(final String message, final Class<T> clazz) {
