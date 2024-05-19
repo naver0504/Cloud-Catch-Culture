@@ -10,6 +10,10 @@ public class EventReportMessage extends BaseMessage{
 
     private CulturalEventDetail culturalEventDetail;
 
+    public void setCulturalEventId(int culturalEventId) {
+        super.culturalEventId = culturalEventId;
+    }
+
     public CulturalEvent toEntity() {
         return CulturalEvent.builder()
                 .culturalEventDetail(culturalEventDetail)
