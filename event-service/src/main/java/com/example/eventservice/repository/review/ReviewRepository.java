@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
-    @Query("select r from Review r where r.culturalEvent.id = :culturalEventId and r.userId = :userId")
+    @Query("select r from Review r where r.culturalEvent.id = :culturalEventId and r.userId = :userId and r.isDeleted = false")
     Optional<Review> findByCulturalEventIdAndUserId(int culturalEventId, long userId);
 
     @Modifying
