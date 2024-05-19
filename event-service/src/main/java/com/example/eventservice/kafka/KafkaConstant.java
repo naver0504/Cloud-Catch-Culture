@@ -15,4 +15,6 @@ public class KafkaConstant {
     public static final String VISIT_AUTH_POINT = "visit-auth-point";
     public static final String ROLLBACK_EVENT_REPORT_POINT = "rollback-event-report-point";
     public static final String ROLLBACK_VISIT_AUTH_POINT = "rollback-visit-auth-point";
+    public static final String REVIEW_POINT = "review-point";
+    public static final String ROLLBACK_REVIEW_POINT = "rollback-review-point";
 }
