@@ -4,6 +4,7 @@ package com.example.userservice.kafka.consumer;
 import com.example.userservice.kafka.KafkaConstant;
 import com.example.userservice.kafka.message.BaseMessage;
 import com.example.userservice.kafka.message.EventReportMessage;
+import com.example.userservice.kafka.message.ReviewMessage;
 import com.example.userservice.kafka.message.VisitAuthMessage;
 import com.example.userservice.repository.PointHistoryRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,10 +31,7 @@ public class KafkaConsumer {
 
         final VisitAuthMessage visitAuthMessage = convertToMessage(message, VisitAuthMessage.class);
         applicationEventPublisher.publishEvent(visitAuthMessage);
-        if(pointHistoryRepository.findByUserIdAndCulturalEventIdAndPointChange(visitAuthMessage.getUserId(), visitAuthMessage.getCulturalEventId(), visitAuthMessage.getPointChange()).isPresent()) {
-            return;
-        }
-        pointHistoryRepository.save(visitAuthMessage.toEntity());
+        savePointHistory(visitAuthMessage);
     }
 
 
@@ -42,12 +40,22 @@ public class KafkaConsumer {
     public void consumeCreateEventReport(final String message) {
         final EventReportMessage eventReportMessage = convertToMessage(message, EventReportMessage.class);
         applicationEventPublisher.publishEvent(eventReportMessage);
-        if(pointHistoryRepository.findByUserIdAndCulturalEventIdAndPointChange(eventReportMessage.getUserId(), eventReportMessage.getCulturalEventId(), eventReportMessage.getPointChange()).isPresent()) {
-            return;
-        }
-        pointHistoryRepository.save(eventReportMessage.toEntity());
+        savePointHistory(eventReportMessage);
     }
 
+    @KafkaListener(topics = KafkaConstant.REVIEW_POINT, groupId = KafkaConstant.GROUP_ID)
+    @Transactional
+    public void consumeCreateReview(final String message) {
+        final ReviewMessage reviewMessage = convertToMessage(message, ReviewMessage.class);
+        applicationEventPublisher.publishEvent(reviewMessage);
+        savePointHistory(reviewMessage);
+    }
+
+    private <T extends BaseMessage> void savePointHistory(T message) {
+        message.isThereSamePointHistory(pointHistoryRepository)
+               .map(BaseMessage::toEntity)
+               .ifPresent(pointHistoryRepository::save);
+    }
 
     private <T extends BaseMessage> T convertToMessage(final String message, Class<T> clazz) {
         try {
@@ -56,5 +64,4 @@ public class KafkaConsumer {
             throw new RuntimeException("Failed to convert message to " + clazz.getSimpleName(), e);
         }
     }
-
 }
