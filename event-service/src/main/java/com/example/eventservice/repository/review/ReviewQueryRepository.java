@@ -68,7 +68,7 @@ public class ReviewQueryRepository {
 
                 )
                 .orderBy(QReview.review.id.asc())
-                .limit(10)
+                .limit(REVIEW_PAGE_SIZE)
                 .fetch();
 
         boolean hasNext = false;
