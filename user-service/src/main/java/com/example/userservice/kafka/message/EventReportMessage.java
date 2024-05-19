@@ -8,15 +8,12 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 @Getter
 public class EventReportMessage extends BaseMessage{
 
 
     public record CulturalEventDetail(String title, String place, LocalDateTime startDate, LocalDateTime endDate) {}
 
-    private final PointChange pointChange = PointChange.CREATE_CULTURAL_EVENT;
     private CulturalEventDetail culturalEventDetail;
 
     @Override
@@ -25,7 +22,12 @@ public class EventReportMessage extends BaseMessage{
         return PointHistory.builder()
                 .culturalEventId(getCulturalEventId())
                 .user(User.createUser(this.getUserId()))
-                .pointChange(pointChange)
+                .pointChange(getPointChange())
                 .build();
+    }
+
+    @Override
+    public PointChange getPointChange() {
+        return PointChange.CREATE_CULTURAL_EVENT;
     }
 }
