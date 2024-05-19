@@ -8,6 +8,8 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface KafkaTransactional {
 
-    String rollbackTopic();
-    String successTopic();
+    String DEFAULT_TOPIC = "Nothing";
+
+    String rollbackTopic() default DEFAULT_TOPIC;
+    String successTopic() default DEFAULT_TOPIC;
 }
