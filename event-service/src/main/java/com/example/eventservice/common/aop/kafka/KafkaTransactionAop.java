@@ -48,9 +48,8 @@ public class KafkaTransactionAop {
         } catch (Exception e) {
             applicationEventPublisher.publishEvent(new KafkaResult.ExceptionResult(rollbackTopic, message));
             transactionManager.rollback(txStatus);
+            throw e;
         }
-
-        return null;
     }
 
     private String setCulturalEventId(final String message, final Integer id) throws JsonProcessingException {
