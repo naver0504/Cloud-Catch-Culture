@@ -51,12 +51,12 @@ public class KafkaConsumer {
     public Integer consumeCreateEventReport(final String message) {
         final EventReportMessage eventReportMessage = convertToMessage(message, EventReportMessage.class);
         final CulturalEventDetail culturalEventDetail = eventReportMessage.getCulturalEventDetail();
-        // 이미 존재하는 Event라는 것은 이전에 Rollback 시 delete 되지 않았던 데이터이므로 그 데이터 재사용
-        // 존재하지 않는다면 새로 생성
-        // todo: 단순히 사용자가 동일한 이벤트를 다시 신고하는 경우에 대한 생각이 필요.. 아마 로직을 바꿔야할 것 같다.
-        return culturalEventRepository.findByCulturalEventDetail(culturalEventDetail.getTitle(), culturalEventDetail.getPlace(),
-                culturalEventDetail.getStartDate(), culturalEventDetail.getEndDate())
-                .map(CulturalEvent::getId).orElseGet(() -> culturalEventRepository.save(eventReportMessage.toEntity()).getId());
+
+        if(culturalEventRepository.findByCulturalEventDetail(culturalEventDetail.getTitle(), culturalEventDetail.getPlace(),
+                culturalEventDetail.getStartDate(), culturalEventDetail.getEndDate()).isPresent()) {
+            throw new RuntimeException("Event already exists");
+        }
+        return culturalEventRepository.save(eventReportMessage.toEntity()).getId();
     }
 
     @KafkaListener(topics = KafkaConstant.ROLLBACK_EVENT_REPORT_POINT, groupId = KafkaConstant.GROUP_ID)
