@@ -25,7 +25,6 @@ public class KafkaConsumer {
 
     private final ObjectMapper objectMapper;
     private final VisitAuthRequestRepository visitAuthRequestRepository;
-    private final ApplicationEventPublisher applicationEventPublisher;
     private final EventReportRepository eventReportRepository;
 
 
@@ -33,7 +32,6 @@ public class KafkaConsumer {
     @Transactional
     public void consumeRollbackVisitAuth(final String message) {
         final VisitAuthMessage visitAuthMessage = OutBoxUtils.convertToBaseMessage(message, VisitAuthMessage.class, objectMapper);
-        applicationEventPublisher.publishEvent(visitAuthMessage);
         visitAuthRequestRepository.unAuthenticateVisitAuthRequest(visitAuthMessage.getUserId(), visitAuthMessage.getCulturalEventId());
 
     }
@@ -42,7 +40,6 @@ public class KafkaConsumer {
     @Transactional
     public void consumeRollbackEventReport(final String message) {
         final EventReportMessage eventReportMessage = OutBoxUtils.convertToBaseMessage(message, EventReportMessage.class, objectMapper);
-        applicationEventPublisher.publishEvent(eventReportMessage);
         eventReportRepository.unAcceptEventReport(eventReportMessage.getUserId(), eventReportMessage.getCulturalEventDetail().getTitle(),
                                                     eventReportMessage.getCulturalEventDetail().getStartDate(), eventReportMessage.getCulturalEventDetail().getEndDate());
     }
