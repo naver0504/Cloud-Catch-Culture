@@ -12,15 +12,15 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.example.eventservice.entity.visitauth.QVisitAuth.*;
+import static com.example.eventservice.domain.entity.event.QCulturalEvent.*;
+import static com.example.eventservice.domain.entity.visitauth.QVisitAuth.*;
 import static com.example.eventservice.domain.repository.event.query.OrderQuery.setOrderWithSortType;
-import static com.example.eventservice.entity.event.QCulturalEvent.culturalEvent;
 import static com.example.eventservice.domain.repository.visitauth.query.WhereQuery.visitAuthUserIdEq;
 
 @Repository
@@ -28,10 +28,11 @@ import static com.example.eventservice.domain.repository.visitauth.query.WhereQu
 public class CulturalEventQueryRepository {
 
     private final JPAQueryFactory queryFactory;
+    public final int pageSize = 8;
 
 
     public Page<EventResponseDTO> getCulturalEventList(final String keyword, final List<Category> categoryList,
-                                                       final Pageable pageable, final SortType sortType) {
+                                                       final int offset, final SortType sortType) {
 
         final LocalDateTime now = LocalDateTime.now();
 
@@ -53,8 +54,8 @@ public class CulturalEventQueryRepository {
                 ).orderBy(
                         setOrderWithSortType(sortType)
                 )
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .offset(offset)
+                .limit(pageSize)
                 .fetch();
 
 
@@ -68,7 +69,7 @@ public class CulturalEventQueryRepository {
                 )
                 .fetchOne();
 
-        return new PageImpl<>(content, pageable, count);
+        return new PageImpl<>(content, PageRequest.of(offset, pageSize), count);
 
     }
 

@@ -1,9 +1,8 @@
 package com.example.eventservice.domain.repository.review;
 
 import com.example.eventservice.controller.dto.ReviewRatingResponseDTO;
-import com.example.eventservice.controller.dto.ReviewResponseDTO;
-import com.example.eventservice.entity.event.QCulturalEvent;
-import com.example.eventservice.entity.review.QReview;
+import com.example.eventservice.domain.entity.event.QCulturalEvent;
+import com.example.eventservice.domain.entity.review.QReview;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.example.eventservice.common.utils.PageUtils.*;
+import static com.example.eventservice.controller.dto.ReviewResponseDTO.*;
 import static com.example.eventservice.domain.repository.event.query.WhereQuery.culturalEventIdEq;
 import static com.example.eventservice.domain.repository.review.query.WhereQuery.*;
 
@@ -23,6 +22,9 @@ import static com.example.eventservice.domain.repository.review.query.WhereQuery
 public class ReviewQueryRepository {
 
     private final JPAQueryFactory queryFactory;
+    private final int REVIEW_PAGE_SIZE = 13;
+
+
 
     public ReviewRatingResponseDTO getReviewRating(final int culturalEventId) {
 
@@ -49,8 +51,8 @@ public class ReviewQueryRepository {
 
     }
 
-    public Slice<ReviewResponseDTO> getReviewList(final int culturalEventId, final long userId, final int lastId) {
-        final List<ReviewResponseDTO> content = queryFactory.select(Projections.fields(ReviewResponseDTO.class,
+    public List<ReviewResponseQueryDTO> getReviewList(final int culturalEventId, final long userId, final int lastId) {
+        return queryFactory.select(Projections.fields(ReviewResponseQueryDTO.class,
                         QReview.review.id.as("reviewId"),
                         QReview.review.userId,
                         QReview.review.content,
@@ -67,9 +69,13 @@ public class ReviewQueryRepository {
                         userIdNotEq(userId)
 
                 )
-                .orderBy(QReview.review.id.asc())
+                .orderBy(QReview.review.createdAt.desc())
                 .limit(REVIEW_PAGE_SIZE)
                 .fetch();
+    }
+
+
+    public <T> Slice<T> createSlice(final List<T> content) {
 
         boolean hasNext = false;
 
