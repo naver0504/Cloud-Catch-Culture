@@ -2,12 +2,12 @@ package com.example.eventservice.service.review;
 
 import com.example.eventservice.common.aop.kafka.KafkaTransactional;
 import com.example.eventservice.common.aop.visitauth.AuthenticatedVisitAuth;
-import com.example.eventservice.dto.CreateReviewRequestDTO;
-import com.example.eventservice.dto.ReviewRatingResponseDTO;
-import com.example.eventservice.dto.ReviewResponseDTO;
-import com.example.eventservice.entity.review.Review;
-import com.example.eventservice.repository.review.ReviewQueryRepository;
-import com.example.eventservice.repository.review.ReviewRepository;
+import com.example.eventservice.controller.dto.CreateReviewRequestDTO;
+import com.example.eventservice.controller.dto.ReviewRatingResponseDTO;
+import com.example.eventservice.controller.dto.ReviewResponseDTO;
+import com.example.eventservice.domain.entity.review.Review;
+import com.example.eventservice.domain.repository.review.ReviewQueryRepository;
+import com.example.eventservice.domain.repository.review.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.example.eventservice.entity.event.CulturalEvent.*;
+import static com.example.eventservice.domain.entity.event.CulturalEvent.*;
 import static com.example.eventservice.kafka.KafkaConstant.*;
 
 @Service

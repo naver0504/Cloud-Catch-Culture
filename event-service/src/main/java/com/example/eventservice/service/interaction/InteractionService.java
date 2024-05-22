@@ -1,15 +1,15 @@
 package com.example.eventservice.service.interaction;
 
-import com.example.eventservice.entity.interaction.Interaction;
-import com.example.eventservice.entity.interaction.LikeStar;
-import com.example.eventservice.repository.interaction.InteractionQueryRepository;
-import com.example.eventservice.repository.interaction.InteractionRepository;
+import com.example.eventservice.domain.entity.interaction.Interaction;
+import com.example.eventservice.domain.entity.interaction.LikeStar;
+import com.example.eventservice.domain.repository.interaction.InteractionQueryRepository;
+import com.example.eventservice.domain.repository.interaction.InteractionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.example.eventservice.entity.interaction.Interaction.createInteraction;
+import static com.example.eventservice.domain.entity.interaction.Interaction.createInteraction;
 
 @Service
 @Transactional(readOnly = true)

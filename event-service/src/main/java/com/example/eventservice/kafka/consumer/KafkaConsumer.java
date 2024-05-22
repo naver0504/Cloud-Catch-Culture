@@ -1,16 +1,15 @@
 package com.example.eventservice.kafka.consumer;
 
-import com.example.eventservice.entity.event.CulturalEvent;
-import com.example.eventservice.entity.event.CulturalEventDetail;
+import com.example.eventservice.domain.entity.event.CulturalEventDetail;
 import com.example.eventservice.kafka.KafkaConstant;
 import com.example.eventservice.common.aop.kafka.KafkaTransactional;
 import com.example.eventservice.kafka.message.BaseMessage;
 import com.example.eventservice.kafka.message.EventReportMessage;
 import com.example.eventservice.kafka.message.ReviewMessage;
 import com.example.eventservice.kafka.message.VisitAuthMessage;
-import com.example.eventservice.repository.event.CulturalEventRepository;
-import com.example.eventservice.repository.review.ReviewRepository;
-import com.example.eventservice.repository.visitauth.VisitAuthRepository;
+import com.example.eventservice.domain.repository.event.CulturalEventRepository;
+import com.example.eventservice.domain.repository.review.ReviewRepository;
+import com.example.eventservice.domain.repository.visitauth.VisitAuthRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

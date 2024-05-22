@@ -1,11 +1,11 @@
 package com.example.eventservice.controller;
 
 import com.example.eventservice.common.type.SortType;
-import com.example.eventservice.dto.CulturalEventDetailsResponseDTO;
-import com.example.eventservice.dto.EventResponseDTO;
-import com.example.eventservice.entity.event.Category;
-import com.example.eventservice.entity.event.CulturalEventDetail;
-import com.example.eventservice.entity.interaction.LikeStar;
+import com.example.eventservice.controller.dto.CulturalEventDetailsResponseDTO;
+import com.example.eventservice.controller.dto.EventResponseDTO;
+import com.example.eventservice.domain.entity.event.Category;
+import com.example.eventservice.domain.entity.event.CulturalEventDetail;
+import com.example.eventservice.domain.entity.interaction.LikeStar;
 import com.example.eventservice.service.event.CulturalEventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

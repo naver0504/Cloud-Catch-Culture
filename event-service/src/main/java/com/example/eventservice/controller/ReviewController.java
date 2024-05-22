@@ -1,8 +1,8 @@
 package com.example.eventservice.controller;
 
-import com.example.eventservice.dto.CreateReviewRequestDTO;
-import com.example.eventservice.dto.ReviewRatingResponseDTO;
-import com.example.eventservice.dto.ReviewResponseDTO;
+import com.example.eventservice.controller.dto.CreateReviewRequestDTO;
+import com.example.eventservice.controller.dto.ReviewRatingResponseDTO;
+import com.example.eventservice.controller.dto.ReviewResponseDTO;
 import com.example.eventservice.service.S3Service;
 import com.example.eventservice.service.review.ReviewService;
 import lombok.RequiredArgsConstructor;

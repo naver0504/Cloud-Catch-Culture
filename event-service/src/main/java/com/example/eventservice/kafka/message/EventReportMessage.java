@@ -1,7 +1,7 @@
 package com.example.eventservice.kafka.message;
 
-import com.example.eventservice.entity.event.CulturalEvent;
-import com.example.eventservice.entity.event.CulturalEventDetail;
+import com.example.eventservice.domain.entity.event.CulturalEvent;
+import com.example.eventservice.domain.entity.event.CulturalEventDetail;
 import lombok.*;
 
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
