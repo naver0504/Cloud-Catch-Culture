@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.example.eventservice.common.utils.PageUtils.*;
 import static com.example.eventservice.domain.entity.interaction.LikeStar.*;
 
 @Service
@@ -37,7 +36,7 @@ public class CulturalEventService {
     private final InteractionService interactionService;
 
     public Page<EventResponseDTO> getCulturalEventList(final String keyword, final List<Category> categoryList, final int offset, final SortType sortType) {
-        return culturalEventQueryRepository.getCulturalEventList(keyword, categoryList, createEventPageRequest(offset), sortType);
+        return culturalEventQueryRepository.getCulturalEventList(keyword, categoryList, offset, sortType);
     }
 
     @Transactional

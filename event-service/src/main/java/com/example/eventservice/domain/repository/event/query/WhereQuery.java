@@ -7,7 +7,7 @@ import com.querydsl.core.types.dsl.NumberExpression;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static com.example.eventservice.entity.event.QCulturalEvent.culturalEvent;
+import static com.example.eventservice.domain.entity.event.QCulturalEvent.culturalEvent;
 
 public final class WhereQuery {
 

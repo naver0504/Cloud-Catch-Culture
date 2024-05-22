@@ -6,7 +6,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import static com.example.eventservice.entity.interaction.QInteraction.interaction;
+import static com.example.eventservice.domain.entity.interaction.QInteraction.interaction;
 
 @Repository
 @RequiredArgsConstructor

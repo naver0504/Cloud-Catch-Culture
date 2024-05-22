@@ -2,7 +2,8 @@ package com.example.eventservice.domain.repository.review.query;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 
-import static com.example.eventservice.entity.review.QReview.*;
+import static com.example.eventservice.domain.entity.review.QReview.review;
+
 
 public final class WhereQuery {
 

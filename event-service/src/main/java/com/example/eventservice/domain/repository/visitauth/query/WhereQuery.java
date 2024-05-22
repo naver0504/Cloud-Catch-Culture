@@ -2,7 +2,7 @@ package com.example.eventservice.domain.repository.visitauth.query;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 
-import static com.example.eventservice.entity.visitauth.QVisitAuth.visitAuth;
+import static com.example.eventservice.domain.entity.visitauth.QVisitAuth.visitAuth;
 
 public class WhereQuery {
 

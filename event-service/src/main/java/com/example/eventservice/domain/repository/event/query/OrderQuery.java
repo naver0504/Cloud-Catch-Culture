@@ -7,7 +7,8 @@ import com.querydsl.core.types.OrderSpecifier;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.eventservice.entity.event.QCulturalEvent.culturalEvent;
+import static com.example.eventservice.domain.entity.event.QCulturalEvent.culturalEvent;
+
 
 public class OrderQuery {
 

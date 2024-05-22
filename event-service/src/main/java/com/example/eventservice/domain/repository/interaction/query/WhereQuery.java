@@ -3,7 +3,7 @@ package com.example.eventservice.domain.repository.interaction.query;
 import com.example.eventservice.domain.entity.interaction.LikeStar;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
-import static com.example.eventservice.entity.interaction.QInteraction.interaction;
+import static com.example.eventservice.domain.entity.interaction.QInteraction.interaction;
 
 public class WhereQuery {
 
