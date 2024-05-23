@@ -60,7 +60,7 @@ public class KafkaTransactionAop {
 
     private DefaultTransactionDefinition getDefaultTransactionDefinition() {
         final DefaultTransactionDefinition defaultTransactionDefinition = new DefaultTransactionDefinition();
-        defaultTransactionDefinition.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_REQUIRES_NEW);
+        defaultTransactionDefinition.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_REQUIRED);
         defaultTransactionDefinition.setIsolationLevel(DefaultTransactionDefinition.ISOLATION_REPEATABLE_READ);
         return defaultTransactionDefinition;
     }
