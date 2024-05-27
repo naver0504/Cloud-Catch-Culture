@@ -1,11 +1,14 @@
 package com.example.eventservice.domain.entity.event;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Slf4j
+@RequiredArgsConstructor
+@Getter
 public enum Category {
     POPUP_STORE("팝업스토어"),
     FESTIVAL("축제"),
@@ -23,16 +26,10 @@ public enum Category {
 
     private final String code;
 
-    Category(String code) {
-        this.code = code;
-    }
-
-    public String getCode() {
-        return code;
-    }
+    private static final List<Category> categoryList = List.of(Category.values());
 
     public static List<Category> getAllOfCategory() {
-        return Arrays.asList(Category.values());
+        return categoryList;
     }
 
     public static Category of(final String code) {
