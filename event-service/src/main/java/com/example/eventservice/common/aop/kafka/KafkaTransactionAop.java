@@ -1,7 +1,9 @@
 package com.example.eventservice.common.aop.kafka;
 
+import com.example.eventservice.domain.entity.review.Review;
 import com.example.eventservice.kafka.KafkaConstant;
 import com.example.eventservice.kafka.message.EventReportMessage;
+import com.example.eventservice.kafka.message.ReviewMessage;
 import com.example.eventservice.kafka.record.KafkaResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,6 +20,8 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.util.Objects;
 
+import static com.example.eventservice.kafka.KafkaConstant.REVIEW_POINT;
+
 @Aspect
 @RequiredArgsConstructor
 @Component
@@ -28,20 +32,28 @@ public class KafkaTransactionAop {
     private final ApplicationEventPublisher applicationEventPublisher;
     private final ObjectMapper objectMapper;
 
-    @Around(value = "@annotation(annotation) && args(message)")
-    public Object aspectKafkaTransaction(final ProceedingJoinPoint joinPoint,final KafkaTransactional annotation, String message) throws Throwable {
+    @Around(value = "@annotation(annotation)")
+    public Object aspectKafkaTransaction(final ProceedingJoinPoint joinPoint,final KafkaTransactional annotation) throws Throwable {
 
         final String successTopic = annotation.successTopic();
         final String rollbackTopic = annotation.rollbackTopic();
-        final TransactionStatus txStatus = transactionManager.getTransaction(getDefaultTransactionDefinition());
+
+        String message = String.valueOf(joinPoint.getArgs()[0]);
+
+        final TransactionStatus txStatus = transactionManager.getTransaction((getDefaultTransactionDefinition()));
         try {
             final Object proceed = joinPoint.proceed(joinPoint.getArgs());
+
+            if(REVIEW_POINT.equals(successTopic)) {
+                message = objectMapper.writeValueAsString(ReviewMessage.of((Review) proceed));
+            }
             if(Objects.equals(successTopic, KafkaConstant.EVENT_REPORT_POINT)) {
                 final Integer id = (Integer) proceed;
                 if(Objects.nonNull(id)) {
                     message = setCulturalEventId(message, id);
                 }
             }
+
             applicationEventPublisher.publishEvent(new KafkaResult.SuccessResult(successTopic, message));
             transactionManager.commit(txStatus);
             return proceed;
@@ -62,6 +74,7 @@ public class KafkaTransactionAop {
         final DefaultTransactionDefinition defaultTransactionDefinition = new DefaultTransactionDefinition();
         defaultTransactionDefinition.setPropagationBehavior(DefaultTransactionDefinition.PROPAGATION_REQUIRED);
         defaultTransactionDefinition.setIsolationLevel(DefaultTransactionDefinition.ISOLATION_REPEATABLE_READ);
+        defaultTransactionDefinition.setReadOnly(false);
         return defaultTransactionDefinition;
     }
 }
