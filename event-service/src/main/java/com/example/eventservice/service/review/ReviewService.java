@@ -85,8 +85,7 @@ public class ReviewService {
                 .culturalEvent(createCulturalEvent(culturalEventId))
                 .build();
 
-        reviewRepository.save(review);
-        throw new RuntimeException("rollback");
+        return reviewRepository.save(review);
     }
 
     @AuthenticatedVisitAuth
