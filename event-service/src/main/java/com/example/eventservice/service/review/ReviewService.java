@@ -2,15 +2,14 @@ package com.example.eventservice.service.review;
 
 import com.example.eventservice.common.aop.kafka.KafkaTransactional;
 import com.example.eventservice.common.aop.visitauth.AuthenticatedVisitAuth;
-import com.example.eventservice.controller.dto.CreateReviewRequestDTO;
-import com.example.eventservice.controller.dto.ReviewRatingResponseDTO;
-import com.example.eventservice.controller.dto.ReviewResponseDTO;
-import com.example.eventservice.controller.dto.UserNicknameForFeign;
+import com.example.eventservice.controller.dto.*;
 import com.example.eventservice.domain.entity.review.Review;
 import com.example.eventservice.domain.repository.review.ReviewQueryRepository;
 import com.example.eventservice.domain.repository.review.ReviewRepository;
 import com.example.eventservice.service.UserServiceClient;
+import com.example.eventservice.service.s3.S3EventForDelete;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,16 +23,18 @@ import static java.util.stream.Collectors.toMap;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ReviewService {
 
     private final ReviewQueryRepository reviewQueryRepository;
     private final ReviewRepository reviewRepository;
     private final UserServiceClient userServiceClient;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
-    @Transactional(readOnly = true)
     public ReviewRatingResponseDTO getReviewRating(final int culturalEventId) {
         return reviewQueryRepository.getReviewRating(culturalEventId);
     }
+
 
     @Transactional(readOnly = true)
     public ReviewResponseDTO getUserReview(final int culturalEventId, final long userId) {
@@ -74,7 +75,7 @@ public class ReviewService {
 
     @AuthenticatedVisitAuth
     @KafkaTransactional(successTopic = REVIEW_POINT)
-    public void createReview(final int culturalEventId, final long userId, final List<String> storedImageUrl, final CreateReviewRequestDTO request) {
+    public Review createReview(final int culturalEventId, final long userId, final List<String> storedImageUrl, final CreateReviewRequestDTO request) {
 
         final Review review = Review.builder()
                 .userId(userId)
@@ -85,5 +86,40 @@ public class ReviewService {
                 .build();
 
         reviewRepository.save(review);
+        throw new RuntimeException("rollback");
+    }
+
+    @AuthenticatedVisitAuth
+    public void updateReview(final int culturalEventId, final long userId, final List<String> storedImageUrl, final UpdateReviewRequestDTO request) {
+        final Review review = reviewRepository.findById(request.reviewId()).orElseThrow(() -> new IllegalArgumentException("Review not found"));
+
+        if(review.getUserId() != userId) {
+            throw new IllegalArgumentException("User not match");
+        }
+        if(review.getCulturalEvent().getId() != culturalEventId) {
+            throw new IllegalArgumentException("Cultural event not match");
+        }
+
+        final List<String> storedImageUrlForDelete = review.getStoredImageUrl();
+        applicationEventPublisher.publishEvent(new S3EventForDelete(storedImageUrlForDelete));
+
+        review.update(storedImageUrl, request.content());
+    }
+
+    @AuthenticatedVisitAuth
+    public void deleteReview(final int culturalEventId, final long userId, final int reviewId) {
+        final Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new IllegalArgumentException("Review not found"));
+
+        if(review.getUserId() != userId) {
+            throw new IllegalArgumentException("User not match");
+        }
+        if(review.getCulturalEvent().getId() != culturalEventId) {
+            throw new IllegalArgumentException("Cultural event not match");
+        }
+
+        review.delete();
+
+        final List<String> storedImageUrlForDelete = review.getStoredImageUrl();
+        applicationEventPublisher.publishEvent(new S3EventForDelete(storedImageUrlForDelete));
     }
 }
