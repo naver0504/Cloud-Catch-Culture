@@ -6,19 +6,23 @@ import com.example.userservice.entity.user.User;
 import lombok.*;
 
 @Getter
-@AllArgsConstructor
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class VisitAuthMessage extends BaseMessage{
 
-    private final PointChange pointChange = PointChange.VISIT_AUTH;
+
     @Override
     public PointHistory toEntity() {
 
         return PointHistory.builder()
                 .culturalEventId(getCulturalEventId())
                 .user(User.createUser(this.getUserId()))
-                .pointChange(pointChange)
+                .pointChange(getPointChange())
                 .build();
+    }
+
+    @Override
+    public PointChange getPointChange() {
+        return PointChange.VISIT_AUTH;
     }
 
 

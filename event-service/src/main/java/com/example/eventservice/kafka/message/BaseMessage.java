@@ -1,23 +1,22 @@
 package com.example.eventservice.kafka.message;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public abstract class BaseMessage {
 
-    @Setter
-    private int culturalEventId;
+    protected int culturalEventId;
     private long userId;
 
-
-    @Setter
-    @JsonIgnore
-    private String topic;
+    protected BaseMessage(long userId, int id) {
+        this.userId = userId;
+        this.culturalEventId = id;
+    }
 
     public String toString(ObjectMapper objectMapper) {
         try {

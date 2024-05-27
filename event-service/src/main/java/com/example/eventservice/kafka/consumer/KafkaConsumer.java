@@ -1,20 +1,20 @@
 package com.example.eventservice.kafka.consumer;
 
-import com.example.eventservice.entity.event.CulturalEventDetail;
+import com.example.eventservice.domain.entity.event.CulturalEventDetail;
 import com.example.eventservice.kafka.KafkaConstant;
+import com.example.eventservice.common.aop.kafka.KafkaTransactional;
 import com.example.eventservice.kafka.message.BaseMessage;
 import com.example.eventservice.kafka.message.EventReportMessage;
+import com.example.eventservice.kafka.message.ReviewMessage;
 import com.example.eventservice.kafka.message.VisitAuthMessage;
-import com.example.eventservice.repository.event.CulturalEventRepository;
-import com.example.eventservice.repository.visitauth.VisitAuthRepository;
+import com.example.eventservice.domain.repository.event.CulturalEventRepository;
+import com.example.eventservice.domain.repository.review.ReviewRepository;
+import com.example.eventservice.domain.repository.visitauth.VisitAuthRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
@@ -24,55 +24,57 @@ public class KafkaConsumer {
     private final ObjectMapper objectMapper;
     private final VisitAuthRepository visitAuthRepository;
     private final CulturalEventRepository culturalEventRepository;
-    private final ApplicationEventPublisher applicationEventPublisher;
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final ReviewRepository reviewRepository;
 
     @KafkaListener(topics = KafkaConstant.CREATE_VISIT_AUTH, groupId = KafkaConstant.GROUP_ID)
-    @Transactional
+    @KafkaTransactional(successTopic = KafkaConstant.VISIT_AUTH_POINT, rollbackTopic = KafkaConstant.ROLLBACK_VISIT_AUTH)
     public void consumeCreateVisitAuth(final String message) {
-
-        final VisitAuthMessage visitAuthMessage = convertToMessage(message, VisitAuthMessage.class, KafkaConstant.CREATE_VISIT_AUTH);
-        applicationEventPublisher.publishEvent(visitAuthMessage);
+        final VisitAuthMessage visitAuthMessage = convertToMessage(message, VisitAuthMessage.class);
         if(visitAuthRepository.findByUserIdAndCulturalEventId(visitAuthMessage.getUserId(), visitAuthMessage.getCulturalEventId()).isPresent()) {
+            // 이미 존재한다는 것은 이전에 Rollback 시 delete 되지 않았던 데이터이므로 그 데이터 재사용
             return;
         }
         visitAuthRepository.save(visitAuthMessage.toEntity());
     }
 
     @KafkaListener(topics = KafkaConstant.ROLLBACK_VISIT_AUTH_POINT, groupId = KafkaConstant.GROUP_ID)
-    @Transactional
+    @KafkaTransactional(successTopic = KafkaConstant.ROLLBACK_VISIT_AUTH, rollbackTopic = KafkaConstant.ROLLBACK_VISIT_AUTH)
     public void consumeRollbackVisitAuth(final String message) {
-        final VisitAuthMessage visitAuthMessage = convertToMessage(message, VisitAuthMessage.class, KafkaConstant.ROLLBACK_VISIT_AUTH_POINT);
-        applicationEventPublisher.publishEvent(visitAuthMessage);
+        final VisitAuthMessage visitAuthMessage = convertToMessage(message, VisitAuthMessage.class);
         visitAuthRepository.deleteByUserIdAndEventId(visitAuthMessage.getUserId(), visitAuthMessage.getCulturalEventId());
     }
 
+
     @KafkaListener(topics = KafkaConstant.CREATE_EVENT_REPORT, groupId = KafkaConstant.GROUP_ID)
-    @Transactional
-    public void consumeCreateEventReport(final String message) {
-        final EventReportMessage eventReportMessage = convertToMessage(message, EventReportMessage.class, KafkaConstant.CREATE_EVENT_REPORT);
+    @KafkaTransactional(successTopic = KafkaConstant.EVENT_REPORT_POINT, rollbackTopic = KafkaConstant.ROLLBACK_EVENT_REPORT)
+    public Integer consumeCreateEventReport(final String message) {
+        final EventReportMessage eventReportMessage = convertToMessage(message, EventReportMessage.class);
         final CulturalEventDetail culturalEventDetail = eventReportMessage.getCulturalEventDetail();
+
         if(culturalEventRepository.findByCulturalEventDetail(culturalEventDetail.getTitle(), culturalEventDetail.getPlace(),
                 culturalEventDetail.getStartDate(), culturalEventDetail.getEndDate()).isPresent()) {
-            return;
+            throw new RuntimeException("Event already exists");
         }
-        eventReportMessage.setCulturalEventId(culturalEventRepository.save(eventReportMessage.toEntity()).getId());
-        applicationEventPublisher.publishEvent(eventReportMessage);
+        return culturalEventRepository.save(eventReportMessage.toEntity()).getId();
     }
 
     @KafkaListener(topics = KafkaConstant.ROLLBACK_EVENT_REPORT_POINT, groupId = KafkaConstant.GROUP_ID)
-    @Transactional
+    @KafkaTransactional(successTopic = KafkaConstant.ROLLBACK_EVENT_REPORT, rollbackTopic = KafkaConstant.ROLLBACK_EVENT_REPORT)
     public void consumeRollbackEventReport(final String message) {
-        final EventReportMessage eventReportMessage = convertToMessage(message, EventReportMessage.class, KafkaConstant.ROLLBACK_EVENT_REPORT_POINT);
-        applicationEventPublisher.publishEvent(eventReportMessage);
+        final EventReportMessage eventReportMessage = convertToMessage(message, EventReportMessage.class);
         culturalEventRepository.deleteById(eventReportMessage.getCulturalEventId());
     }
 
-    private <T extends BaseMessage> T convertToMessage(final String message, final Class<T> clazz, final String topic) {
+    @KafkaListener(topics = KafkaConstant.ROLLBACK_REVIEW_POINT, groupId = KafkaConstant.GROUP_ID)
+    @KafkaTransactional
+    public void consumeRollbackReview(final String message) {
+        final ReviewMessage reviewMessage = convertToMessage(message, ReviewMessage.class);
+        reviewRepository.deleteByCulturalEventIdAndUserId(reviewMessage.getCulturalEventId(), reviewMessage.getUserId());
+    }
+
+    private <T extends BaseMessage> T convertToMessage(final String message, final Class<T> clazz) {
         try {
-            T baseMessage = objectMapper.readValue(message, clazz);
-            baseMessage.setTopic(topic);
-            return baseMessage;
+            return objectMapper.readValue(message, clazz);
         } catch (Exception e) {
             throw new RuntimeException("Failed to convert message to " + clazz.getSimpleName(), e);
         }

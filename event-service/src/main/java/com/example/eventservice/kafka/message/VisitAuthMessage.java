@@ -1,11 +1,10 @@
 package com.example.eventservice.kafka.message;
 
-import com.example.eventservice.entity.event.CulturalEvent;
-import com.example.eventservice.entity.visitauth.VisitAuth;
+import com.example.eventservice.domain.entity.event.CulturalEvent;
+import com.example.eventservice.domain.entity.visitauth.VisitAuth;
 import lombok.*;
 
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class VisitAuthMessage extends BaseMessage{
 

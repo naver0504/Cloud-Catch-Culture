@@ -1,15 +1,15 @@
 package com.example.eventservice.service.event;
 
 import com.example.eventservice.common.type.SortType;
-import com.example.eventservice.dto.CulturalEventDetailsResponseDTO;
-import com.example.eventservice.dto.EventResponseDTO;
-import com.example.eventservice.entity.event.Category;
-import com.example.eventservice.entity.event.CulturalEvent;
-import com.example.eventservice.entity.event.CulturalEventDetail;
-import com.example.eventservice.entity.interaction.LikeStar;
-import com.example.eventservice.redis.DistributedLock;
-import com.example.eventservice.repository.event.CulturalEventQueryRepository;
-import com.example.eventservice.repository.event.CulturalEventRepository;
+import com.example.eventservice.controller.dto.CulturalEventDetailsResponseDTO;
+import com.example.eventservice.controller.dto.EventResponseDTO;
+import com.example.eventservice.domain.entity.event.Category;
+import com.example.eventservice.domain.entity.event.CulturalEvent;
+import com.example.eventservice.domain.entity.event.CulturalEventDetail;
+import com.example.eventservice.domain.entity.interaction.LikeStar;
+import com.example.eventservice.common.aop.redis.DistributedLock;
+import com.example.eventservice.domain.repository.event.CulturalEventQueryRepository;
+import com.example.eventservice.domain.repository.event.CulturalEventRepository;
 import com.example.eventservice.service.interaction.InteractionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,8 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.example.eventservice.common.utils.PageUtils.*;
-import static com.example.eventservice.entity.interaction.LikeStar.*;
+import static com.example.eventservice.domain.entity.interaction.LikeStar.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -37,7 +36,7 @@ public class CulturalEventService {
     private final InteractionService interactionService;
 
     public Page<EventResponseDTO> getCulturalEventList(final String keyword, final List<Category> categoryList, final int offset, final SortType sortType) {
-        return culturalEventQueryRepository.getCulturalEventList(keyword, categoryList, createEventPageRequest(offset), sortType);
+        return culturalEventQueryRepository.getCulturalEventList(keyword, categoryList, offset, sortType);
     }
 
     @Transactional
