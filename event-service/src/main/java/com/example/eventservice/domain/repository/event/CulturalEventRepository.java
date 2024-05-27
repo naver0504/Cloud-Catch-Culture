@@ -25,11 +25,12 @@ public interface CulturalEventRepository extends JpaRepository<CulturalEvent, In
     @Modifying(clearAutomatically = true)
     void updateStarCount(int culturalEventId, int count);
 
-    @Query(value = "select * from cultural_event as c where c.id = :culturalEventId for update", nativeQuery = true)
-    Optional<CulturalEvent> findByIdForUpdate(int culturalEventId);
-
     @Query("select c from CulturalEvent c where c.culturalEventDetail.title = :title and c.culturalEventDetail.place = :place " +
             "and c.culturalEventDetail.startDate = :startDate and c.culturalEventDetail.endDate = :endDate")
     Optional<CulturalEvent> findByCulturalEventDetail(String title, String place, LocalDateTime startDate, LocalDateTime endDate);
+
+    @Deprecated
+    @Query(value = "select * from cultural_event as c where c.id = :culturalEventId for update", nativeQuery = true)
+    Optional<CulturalEvent> findByIdForUpdate(int culturalEventId);
 
 }
