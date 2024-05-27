@@ -55,4 +55,8 @@ public class Review {
         this.isDeleted = true;
     }
 
+    public void update(List<String> storedImageUrl, String content) {
+        this.storedImageUrl = storedImageUrl;
+        this.content = content;
+    }
 }
