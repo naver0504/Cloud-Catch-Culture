@@ -13,6 +13,11 @@ public abstract class BaseMessage {
     protected int culturalEventId;
     private long userId;
 
+    protected BaseMessage(long userId, int id) {
+        this.userId = userId;
+        this.culturalEventId = id;
+    }
+
     public String toString(ObjectMapper objectMapper) {
         try {
             return objectMapper.writeValueAsString(this);
