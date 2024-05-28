@@ -6,6 +6,7 @@ import com.example.reportservice.dto.event_report.EventReportDetailResponseDTO;
 import com.example.reportservice.dto.event_report.EventReportRequestDTO;
 import com.example.reportservice.dto.event_report.EventReportResponseDTO;
 import com.example.reportservice.service.event_report.EventReportService;
+import com.example.reportservice.service.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/event-report")
@@ -22,13 +24,18 @@ import java.util.List;
 public class EventReportController {
 
     private final EventReportService eventReportService;
+    private final S3Service s3Service;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Void> createEventReport(final @RequestHeader("userId") long userId,
                                                   final @RequestPart("fileList") List<MultipartFile> fileList,
                                                   final @RequestPart("report") EventReportRequestDTO createEventReportDto) {
 
-        eventReportService.createEventReport(userId, fileList, createEventReportDto);
+        final List<String> imageUrls = fileList.stream()
+                .map(s3Service::uploadFile)
+                .collect(Collectors.toList());
+
+        eventReportService.createEventReport(userId, imageUrls, createEventReportDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
