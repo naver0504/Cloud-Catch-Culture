@@ -1,10 +1,9 @@
 package com.example.reportservice.service.outbox;
 
-import com.example.reportservice.common.utils.OutBoxUtils;
-import com.example.reportservice.entity.BaseEntity;
-import com.example.reportservice.entity.outbox.OutBox;
+import com.example.reportservice.domain.entity.BaseEntity;
+import com.example.reportservice.domain.entity.outbox.OutBox;
 import com.example.reportservice.kafka.message.BaseMessage;
-import com.example.reportservice.repository.outbox.OutBoxRepository;
+import com.example.reportservice.domain.adapter.outbox.OutBoxRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,10 +20,10 @@ public class OutBoxService {
     private final ObjectMapper objectMapper;
 
 
-    public <T extends BaseEntity> void createMessage(final T content)  {
+    public <T extends BaseEntity> void createMessage(final T content) {
 
-        final BaseMessage baseMessage = OutBoxUtils.convertToBaseMessage(content);
-        final String payload = OutBoxUtils.getPayload(baseMessage, objectMapper);
+        final BaseMessage baseMessage = content.toBaseMessage();
+        final String payload = baseMessage.getPayload(objectMapper);
 
         final OutBox outbox = OutBox.builder()
                 .eventType(baseMessage.getEventType())
