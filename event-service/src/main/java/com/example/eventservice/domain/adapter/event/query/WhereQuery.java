@@ -1,4 +1,4 @@
-package com.example.eventservice.domain.repository.event.query;
+package com.example.eventservice.domain.adapter.event.query;
 
 import com.example.eventservice.domain.entity.event.Category;
 import com.querydsl.core.types.dsl.BooleanExpression;

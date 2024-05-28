@@ -1,4 +1,4 @@
-package com.example.eventservice.domain.repository.review;
+package com.example.eventservice.domain.adapter.review;
 
 import com.example.eventservice.domain.entity.review.Review;
 import org.springframework.data.jpa.repository.JpaRepository;

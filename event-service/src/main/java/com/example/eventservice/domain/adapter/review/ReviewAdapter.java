@@ -1,10 +1,9 @@
-package com.example.eventservice.domain.repository.review;
+package com.example.eventservice.domain.adapter.review;
 
 import com.example.eventservice.controller.dto.ReviewRatingResponseDTO;
 import com.example.eventservice.controller.dto.ReviewResponseDTO;
 import com.example.eventservice.domain.entity.review.Review;
-import com.example.eventservice.domain.repository.BaseAdapter;
-import com.example.eventservice.domain.repository.interaction.InteractionAdapter;
+import com.example.eventservice.domain.adapter.BaseAdapter;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package com.example.eventservice.domain.repository.event;
+package com.example.eventservice.domain.adapter.event;
 
 import com.example.eventservice.common.type.SortType;
 import com.example.eventservice.controller.dto.CulturalEventDetailsResponseDTO;
@@ -6,7 +6,7 @@ import com.example.eventservice.controller.dto.EventResponseDTO;
 import com.example.eventservice.domain.entity.event.Category;
 import com.example.eventservice.domain.entity.event.CulturalEvent;
 import com.example.eventservice.domain.entity.event.CulturalEventDetail;
-import com.example.eventservice.domain.repository.BaseAdapter;
+import com.example.eventservice.domain.adapter.BaseAdapter;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Repository;
 

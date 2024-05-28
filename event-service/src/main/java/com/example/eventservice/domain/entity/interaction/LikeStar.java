@@ -1,7 +1,6 @@
 package com.example.eventservice.domain.entity.interaction;
 
-import com.example.eventservice.domain.repository.event.CulturalEventAdapter;
-import com.example.eventservice.domain.repository.event.CulturalEventRepository;
+import com.example.eventservice.domain.adapter.event.CulturalEventAdapter;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.TriConsumer;

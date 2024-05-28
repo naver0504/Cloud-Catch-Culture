@@ -1,8 +1,8 @@
-package com.example.eventservice.domain.repository.interaction;
+package com.example.eventservice.domain.adapter.interaction;
 
 import com.example.eventservice.domain.entity.interaction.Interaction;
 import com.example.eventservice.domain.entity.interaction.LikeStar;
-import com.example.eventservice.domain.repository.BaseAdapter;
+import com.example.eventservice.domain.adapter.BaseAdapter;
 import org.springframework.stereotype.Repository;
 
 @Repository

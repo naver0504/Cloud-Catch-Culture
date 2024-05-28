@@ -2,7 +2,7 @@ package com.example.eventservice.service.interaction;
 
 import com.example.eventservice.domain.entity.interaction.Interaction;
 import com.example.eventservice.domain.entity.interaction.LikeStar;
-import com.example.eventservice.domain.repository.interaction.InteractionAdapter;
+import com.example.eventservice.domain.adapter.interaction.InteractionAdapter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

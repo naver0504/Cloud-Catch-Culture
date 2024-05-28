@@ -4,7 +4,7 @@ import com.example.eventservice.common.aop.kafka.KafkaTransactional;
 import com.example.eventservice.common.aop.visitauth.AuthenticatedVisitAuth;
 import com.example.eventservice.controller.dto.*;
 import com.example.eventservice.domain.entity.review.Review;
-import com.example.eventservice.domain.repository.review.ReviewAdapter;
+import com.example.eventservice.domain.adapter.review.ReviewAdapter;
 import com.example.eventservice.service.UserServiceClient;
 import com.example.eventservice.service.s3.S3EventForDelete;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package com.example.eventservice.domain.repository.event;
+package com.example.eventservice.domain.adapter.event;
 
 import com.example.eventservice.domain.entity.event.CulturalEvent;
 import org.springframework.data.jpa.repository.JpaRepository;

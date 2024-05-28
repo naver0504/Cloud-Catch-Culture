@@ -1,7 +1,7 @@
-package com.example.eventservice.domain.repository.event;
+package com.example.eventservice.domain.adapter.event;
 
 import com.example.eventservice.common.type.SortType;
-import com.example.eventservice.domain.repository.event.query.WhereQuery;
+import com.example.eventservice.domain.adapter.event.query.WhereQuery;
 import com.example.eventservice.controller.dto.CulturalEventDetailsResponseDTO;
 import com.example.eventservice.controller.dto.EventResponseDTO;
 import com.example.eventservice.domain.entity.event.Category;
@@ -20,8 +20,8 @@ import java.util.List;
 
 import static com.example.eventservice.domain.entity.event.QCulturalEvent.*;
 import static com.example.eventservice.domain.entity.visitauth.QVisitAuth.*;
-import static com.example.eventservice.domain.repository.event.query.OrderQuery.setOrderWithSortType;
-import static com.example.eventservice.domain.repository.visitauth.query.WhereQuery.visitAuthUserIdEq;
+import static com.example.eventservice.domain.adapter.event.query.OrderQuery.setOrderWithSortType;
+import static com.example.eventservice.domain.adapter.visitauth.query.WhereQuery.visitAuthUserIdEq;
 
 @Repository
 @RequiredArgsConstructor

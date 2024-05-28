@@ -1,4 +1,4 @@
-package com.example.eventservice.domain.repository.visitauth.query;
+package com.example.eventservice.domain.adapter.visitauth.query;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 

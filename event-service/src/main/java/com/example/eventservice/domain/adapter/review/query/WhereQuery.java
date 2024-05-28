@@ -1,4 +1,4 @@
-package com.example.eventservice.domain.repository.review.query;
+package com.example.eventservice.domain.adapter.review.query;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 

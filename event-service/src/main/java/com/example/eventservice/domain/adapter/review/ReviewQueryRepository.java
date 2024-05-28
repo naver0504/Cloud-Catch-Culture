@@ -1,4 +1,4 @@
-package com.example.eventservice.domain.repository.review;
+package com.example.eventservice.domain.adapter.review;
 
 import com.example.eventservice.controller.dto.ReviewRatingResponseDTO;
 import com.example.eventservice.domain.entity.event.QCulturalEvent;
@@ -14,8 +14,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.example.eventservice.controller.dto.ReviewResponseDTO.*;
-import static com.example.eventservice.domain.repository.event.query.WhereQuery.culturalEventIdEq;
-import static com.example.eventservice.domain.repository.review.query.WhereQuery.*;
+import static com.example.eventservice.domain.adapter.event.query.WhereQuery.culturalEventIdEq;
+import static com.example.eventservice.domain.adapter.review.query.WhereQuery.*;
 
 @Repository
 @RequiredArgsConstructor

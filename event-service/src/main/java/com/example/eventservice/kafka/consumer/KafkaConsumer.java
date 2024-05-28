@@ -1,9 +1,9 @@
 package com.example.eventservice.kafka.consumer;
 
 import com.example.eventservice.domain.entity.event.CulturalEventDetail;
-import com.example.eventservice.domain.repository.event.CulturalEventAdapter;
-import com.example.eventservice.domain.repository.review.ReviewAdapter;
-import com.example.eventservice.domain.repository.visitauth.VisitAuthAdapter;
+import com.example.eventservice.domain.adapter.event.CulturalEventAdapter;
+import com.example.eventservice.domain.adapter.review.ReviewAdapter;
+import com.example.eventservice.domain.adapter.visitauth.VisitAuthAdapter;
 import com.example.eventservice.kafka.KafkaConstant;
 import com.example.eventservice.common.aop.kafka.KafkaTransactional;
 import com.example.eventservice.kafka.message.BaseMessage;

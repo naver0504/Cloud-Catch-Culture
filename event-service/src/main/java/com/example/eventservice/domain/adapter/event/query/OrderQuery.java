@@ -1,4 +1,4 @@
-package com.example.eventservice.domain.repository.event.query;
+package com.example.eventservice.domain.adapter.event.query;
 
 import com.example.eventservice.common.type.SortType;
 import com.querydsl.core.types.Order;

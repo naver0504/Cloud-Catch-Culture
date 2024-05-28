@@ -8,7 +8,7 @@ import com.example.eventservice.domain.entity.event.CulturalEvent;
 import com.example.eventservice.domain.entity.event.CulturalEventDetail;
 import com.example.eventservice.domain.entity.interaction.LikeStar;
 import com.example.eventservice.common.aop.redis.DistributedLock;
-import com.example.eventservice.domain.repository.event.CulturalEventAdapter;
+import com.example.eventservice.domain.adapter.event.CulturalEventAdapter;
 import com.example.eventservice.service.interaction.InteractionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

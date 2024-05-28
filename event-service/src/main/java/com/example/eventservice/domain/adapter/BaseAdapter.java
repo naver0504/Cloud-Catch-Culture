@@ -1,4 +1,4 @@
-package com.example.eventservice.domain.repository;
+package com.example.eventservice.domain.adapter;
 
 import java.util.Optional;
 

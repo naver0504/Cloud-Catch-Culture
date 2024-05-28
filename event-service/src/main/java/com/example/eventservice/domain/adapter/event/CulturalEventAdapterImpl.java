@@ -1,4 +1,4 @@
-package com.example.eventservice.domain.repository.event;
+package com.example.eventservice.domain.adapter.event;
 
 import com.example.eventservice.common.type.SortType;
 import com.example.eventservice.controller.dto.CulturalEventDetailsResponseDTO;

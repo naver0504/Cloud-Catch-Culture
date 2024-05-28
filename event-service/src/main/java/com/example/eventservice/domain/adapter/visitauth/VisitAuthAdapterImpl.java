@@ -1,4 +1,4 @@
-package com.example.eventservice.domain.repository.visitauth;
+package com.example.eventservice.domain.adapter.visitauth;
 
 import com.example.eventservice.domain.entity.visitauth.VisitAuth;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
-package com.example.eventservice.domain.repository.interaction;
+package com.example.eventservice.domain.adapter.interaction;
 
 import com.example.eventservice.domain.entity.interaction.LikeStar;
-import com.example.eventservice.domain.repository.interaction.query.WhereQuery;
+import com.example.eventservice.domain.adapter.interaction.query.WhereQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

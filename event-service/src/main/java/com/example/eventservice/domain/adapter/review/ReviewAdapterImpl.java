@@ -1,4 +1,4 @@
-package com.example.eventservice.domain.repository.review;
+package com.example.eventservice.domain.adapter.review;
 
 import com.example.eventservice.controller.dto.ReviewRatingResponseDTO;
 import com.example.eventservice.controller.dto.ReviewResponseDTO;

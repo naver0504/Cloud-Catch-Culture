@@ -1,7 +1,7 @@
 package com.example.eventservice.common.aop.visitauth;
 
-import com.example.eventservice.domain.repository.event.CulturalEventAdapter;
-import com.example.eventservice.domain.repository.visitauth.VisitAuthAdapter;
+import com.example.eventservice.domain.adapter.event.CulturalEventAdapter;
+import com.example.eventservice.domain.adapter.visitauth.VisitAuthAdapter;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

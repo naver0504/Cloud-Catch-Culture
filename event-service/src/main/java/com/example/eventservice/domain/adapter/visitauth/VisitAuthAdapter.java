@@ -1,7 +1,7 @@
-package com.example.eventservice.domain.repository.visitauth;
+package com.example.eventservice.domain.adapter.visitauth;
 
 import com.example.eventservice.domain.entity.visitauth.VisitAuth;
-import com.example.eventservice.domain.repository.BaseAdapter;
+import com.example.eventservice.domain.adapter.BaseAdapter;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

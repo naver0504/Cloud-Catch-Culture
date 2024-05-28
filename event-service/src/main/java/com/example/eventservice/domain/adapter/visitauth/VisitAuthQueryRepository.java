@@ -1,7 +1,7 @@
-package com.example.eventservice.domain.repository.visitauth;
+package com.example.eventservice.domain.adapter.visitauth;
 
 import com.example.eventservice.domain.entity.visitauth.QVisitAuth;
-import com.example.eventservice.domain.repository.visitauth.query.WhereQuery;
+import com.example.eventservice.domain.adapter.visitauth.query.WhereQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
