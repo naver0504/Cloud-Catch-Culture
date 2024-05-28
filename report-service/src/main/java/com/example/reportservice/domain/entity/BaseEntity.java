@@ -1,5 +1,6 @@
-package com.example.reportservice.entity;
+package com.example.reportservice.domain.entity;
 
+import com.example.reportservice.kafka.message.BaseMessage;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
@@ -15,4 +16,6 @@ public abstract class BaseEntity {
 
     @CreatedDate
     private LocalDateTime createdAt;
+
+    abstract public BaseMessage toBaseMessage();
 }
