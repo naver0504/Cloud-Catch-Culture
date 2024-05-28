@@ -21,13 +21,18 @@ public class EventReportAdapterImpl implements EventReportAdapter{
     }
 
     @Override
-    public Optional<EventReport> findById(int eventReportId) {
+    public Optional<EventReport> findById(Integer eventReportId) {
         return eventReportRepository.findById(eventReportId);
     }
 
     @Override
-    public void save(EventReport eventReport) {
-        eventReportRepository.save(eventReport);
+    public EventReport save(EventReport eventReport) {
+        return eventReportRepository.save(eventReport);
+    }
+
+    @Override
+    public void deleteById(Integer id) {
+        eventReportRepository.deleteById(id);
     }
 
     @Override
