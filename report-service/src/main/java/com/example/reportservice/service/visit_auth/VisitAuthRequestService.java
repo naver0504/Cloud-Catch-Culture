@@ -1,49 +1,38 @@
 package com.example.reportservice.service.visit_auth;
 
 import com.example.reportservice.client.EventFeignClient;
-import com.example.reportservice.entity.event_report.CulturalEventDetail;
+import com.example.reportservice.domain.adapter.visit_auth.VisitAuthRequestAdapter;
+import com.example.reportservice.domain.entity.event_report.CulturalEventDetail;
 import com.example.reportservice.common.constant.VisitAuthConstant;
-import com.example.reportservice.common.utils.ImageUtils;
 import com.example.reportservice.dto.visit_auth.VisitAuthRequestDetailDTO;
 import com.example.reportservice.dto.visit_auth.VisitAuthRequestResponseDTO;
-import com.example.reportservice.entity.visit_auth.VisitAuthRequest;
-import com.example.reportservice.repository.visit_auth.VisitAuthRequestQueryRepository;
-import com.example.reportservice.repository.visit_auth.VisitAuthRequestRepository;
-import com.example.reportservice.service.s3.S3Service;
+import com.example.reportservice.domain.entity.visit_auth.VisitAuthRequest;
+import com.example.reportservice.service.outbox.OutBoxService;
+import com.example.reportservice.service.s3.S3Event;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class VisitAuthRequestService {
 
-    private final VisitAuthTxRequestService visitAuthTxRequestService;
-
-    private final VisitAuthRequestQueryRepository visitAuthRequestQueryRepository;
-    private final VisitAuthRequestRepository visitAuthRequestRepository;
-
+    private final OutBoxService outBoxService;
+    private final VisitAuthRequestAdapter visitAuthRequestAdapter;
+    private final ApplicationEventPublisher applicationEventPublisher;
     private final EventFeignClient eventFeignClient;
-    private final S3Service s3Service;
 
-    public void createVisitAuthRequest(final long userId, final int culturalEventId, final List<MultipartFile> fileList) {
+    @Transactional
+    public void createVisitAuthRequest(final long userId, final int culturalEventId, final List<String> imageUrls) {
 
-        if(!ImageUtils.validateImage(fileList)) {
-            throw new IllegalArgumentException("Invalid image file");
-        }
-
-        if(Objects.isNull(eventFeignClient.getCulturalEventDetail(culturalEventId).getBody())) {
+        if(eventFeignClient.getCulturalEventDetail(culturalEventId).getBody() == null) {
             throw new IllegalArgumentException("Invalid cultural event id");
         }
-
-        final List<String> imageUrls = fileList.stream()
-                .map(s3Service::uploadFile)
-                .collect(Collectors.toList());
 
         final VisitAuthRequest visitAuthRequest = VisitAuthRequest.builder()
                 .userId(userId)
@@ -51,26 +40,28 @@ public class VisitAuthRequestService {
                 .storedFileUrl(imageUrls)
                 .build();
 
-        visitAuthTxRequestService.createVisitAuthRequest(visitAuthRequest);
-    }
+        applicationEventPublisher.publishEvent(new S3Event(visitAuthRequest.getStoredFileUrl()));
+        visitAuthRequestAdapter.save(visitAuthRequest);    }
 
     public Slice<VisitAuthRequestResponseDTO> getVisitAuthRequestList(final int lastId, final VisitAuthConstant visitAuthConstant) {
-        return visitAuthRequestQueryRepository.getVisitAuthRequestList(lastId, visitAuthConstant);
+        return visitAuthRequestAdapter.getVisitAuthRequestList(lastId, visitAuthConstant);
     }
 
     public VisitAuthRequestDetailDTO getVisitAuthRequest(final int visitAuthRequestId) {
-        final VisitAuthRequest visitAuthRequest = visitAuthRequestRepository.findById(visitAuthRequestId).orElseThrow(() -> new IllegalArgumentException("Invalid visit auth request id"));
+        final VisitAuthRequest visitAuthRequest = visitAuthRequestAdapter.findById(visitAuthRequestId).orElseThrow(() -> new IllegalArgumentException("Invalid visit auth request id"));
         final CulturalEventDetail culturalEventDetail = eventFeignClient.getCulturalEventDetail(visitAuthRequest.getCulturalEventId()).getBody();
 
-        if(Objects.isNull(culturalEventDetail)) {
+        if(culturalEventDetail == null) {
             throw new IllegalArgumentException("Invalid cultural event id");
         }
 
-        return VisitAuthRequestDetailDTO.of(visitAuthRequest, culturalEventDetail);
+        return new VisitAuthRequestDetailDTO(visitAuthRequest, culturalEventDetail);
     }
 
+    @Transactional
     public void authenticateVisitAuthRequest(int visitAuthId) {
-        final VisitAuthRequest visitAuthRequest = visitAuthRequestRepository.findById(visitAuthId).orElseThrow(() -> new IllegalArgumentException("Invalid visit auth request id"));
-        visitAuthTxRequestService.authenticateVisitAuthRequest(visitAuthRequest);
+        final VisitAuthRequest visitAuthRequest = visitAuthRequestAdapter.findById(visitAuthId).orElseThrow(() -> new IllegalArgumentException("Invalid visit auth request id"));
+        visitAuthRequest.authenticate();
+        outBoxService.createMessage(visitAuthRequest);
     }
 }
