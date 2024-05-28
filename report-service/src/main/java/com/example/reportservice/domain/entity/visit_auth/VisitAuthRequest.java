@@ -1,14 +1,14 @@
-package com.example.reportservice.entity.visit_auth;
+package com.example.reportservice.domain.entity.visit_auth;
 
 import com.example.reportservice.common.converter.StoredFileUrlConverter;
-import com.example.reportservice.entity.BaseEntity;
+import com.example.reportservice.domain.entity.BaseEntity;
+import com.example.reportservice.kafka.message.BaseMessage;
+import com.example.reportservice.kafka.message.VisitAuthMessage;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -35,4 +35,16 @@ public class VisitAuthRequest extends BaseEntity {
 
     private boolean isAuthenticated;
 
+    @Override
+    public BaseMessage toBaseMessage() {
+        return new VisitAuthMessage(this.userId, this.culturalEventId);
+    }
+
+    public void authenticate() {
+        this.isAuthenticated = true;
+    }
+
+    public void unAuthenticate() {
+        this.isAuthenticated = false;
+    }
 }

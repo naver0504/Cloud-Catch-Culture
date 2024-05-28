@@ -1,6 +1,8 @@
-package com.example.reportservice.entity.event_report;
+package com.example.reportservice.domain.entity.event_report;
 
-import com.example.reportservice.entity.BaseEntity;
+import com.example.reportservice.domain.entity.BaseEntity;
+import com.example.reportservice.kafka.message.BaseMessage;
+import com.example.reportservice.kafka.message.EventReportMessage;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -35,4 +37,16 @@ public class EventReport extends BaseEntity {
                 .build();
     }
 
+    @Override
+    public BaseMessage toBaseMessage() {
+        return new EventReportMessage(this.userId, this.culturalEventDetail);
+    }
+
+    public void accept() {
+        this.isAccepted = true;
+    }
+
+    public void unAccept() {
+        this.isAccepted = false;
+    }
 }
