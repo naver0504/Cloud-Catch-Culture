@@ -8,8 +8,7 @@ import com.example.eventservice.domain.entity.event.CulturalEvent;
 import com.example.eventservice.domain.entity.event.CulturalEventDetail;
 import com.example.eventservice.domain.entity.interaction.LikeStar;
 import com.example.eventservice.common.aop.redis.DistributedLock;
-import com.example.eventservice.domain.repository.event.CulturalEventQueryRepository;
-import com.example.eventservice.domain.repository.event.CulturalEventRepository;
+import com.example.eventservice.domain.repository.event.CulturalEventAdapter;
 import com.example.eventservice.service.interaction.InteractionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,18 +30,17 @@ public class CulturalEventService {
     private final int MINUS_COUNT = -1;
 
 
-    private final CulturalEventQueryRepository culturalEventQueryRepository;
-    private final CulturalEventRepository culturalEventRepository;
+    private final CulturalEventAdapter culturalEventAdapter;
     private final InteractionService interactionService;
 
     public Page<EventResponseDTO> getCulturalEventList(final String keyword, final List<Category> categoryList, final int offset, final SortType sortType) {
-        return culturalEventQueryRepository.getCulturalEventList(keyword, categoryList, offset, sortType);
+        return culturalEventAdapter.getCulturalEventList(keyword, categoryList, offset, sortType);
     }
 
     @Transactional
     public CulturalEventDetailsResponseDTO getCulturalEventDetails(final int culturalEventId, final long userId) {
-        final CulturalEventDetailsResponseDTO culturalEventDetails = culturalEventQueryRepository.getCulturalEventDetails(culturalEventId, userId);
-        culturalEventRepository.updateViewCount(culturalEventId);
+        final CulturalEventDetailsResponseDTO culturalEventDetails = culturalEventAdapter.getCulturalEventDetails(culturalEventId, userId);
+        culturalEventAdapter.updateViewCount(culturalEventId);
 
         culturalEventDetails.setLikeAndStar(
                 interactionService.isLikedOrStar(culturalEventId, userId, LIKE),
@@ -70,11 +68,11 @@ public class CulturalEventService {
     @DistributedLock(key = "#culturalEventId+':'+#userId+':'+#likeStar")
     public void createInteraction(final int culturalEventId, final long userId, final LikeStar likeStar) {
 
-        if(culturalEventQueryRepository.existsCulturalEvent(culturalEventId)) {
+        if(culturalEventAdapter.existsCulturalEvent(culturalEventId)) {
             throw new IllegalStateException("Cultural event does not exist");
         }
         interactionService.saveLikeStar(culturalEventId, userId, likeStar);
-        likeStar.updateCount(culturalEventRepository, culturalEventId, PLUS_COUNT);
+        likeStar.updateCount(culturalEventAdapter, culturalEventId, PLUS_COUNT);
 
     }
 
@@ -93,18 +91,15 @@ public class CulturalEventService {
     @DistributedLock(key = "#culturalEventId")
     public void cancelInteraction(final int culturalEventId, final long userId, final LikeStar likeStar) {
 
-        if(culturalEventQueryRepository.existsCulturalEvent(culturalEventId)) {
+        if(culturalEventAdapter.existsCulturalEvent(culturalEventId)) {
             throw new IllegalStateException("Cultural event does not exist");
         }
         interactionService.deleteLikeStar(culturalEventId, userId, likeStar);
-        likeStar.updateCount(culturalEventRepository, culturalEventId, MINUS_COUNT);
+        likeStar.updateCount(culturalEventAdapter, culturalEventId, MINUS_COUNT);
     }
 
-
-
-
     public CulturalEventDetail existsCulturalEvent(final int culturalEventId) {
-        final CulturalEvent culturalEvent = culturalEventRepository.findById(culturalEventId).orElse(null);
+        final CulturalEvent culturalEvent = culturalEventAdapter.findById(culturalEventId).orElse(null);
         return culturalEvent == null ? null : culturalEvent.getCulturalEventDetail();
     }
 }

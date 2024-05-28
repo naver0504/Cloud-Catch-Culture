@@ -4,8 +4,7 @@ import com.example.eventservice.common.aop.kafka.KafkaTransactional;
 import com.example.eventservice.common.aop.visitauth.AuthenticatedVisitAuth;
 import com.example.eventservice.controller.dto.*;
 import com.example.eventservice.domain.entity.review.Review;
-import com.example.eventservice.domain.repository.review.ReviewQueryRepository;
-import com.example.eventservice.domain.repository.review.ReviewRepository;
+import com.example.eventservice.domain.repository.review.ReviewAdapter;
 import com.example.eventservice.service.UserServiceClient;
 import com.example.eventservice.service.s3.S3EventForDelete;
 import lombok.RequiredArgsConstructor;
@@ -26,13 +25,12 @@ import static java.util.stream.Collectors.toMap;
 @Transactional
 public class ReviewService {
 
-    private final ReviewQueryRepository reviewQueryRepository;
-    private final ReviewRepository reviewRepository;
+    private final ReviewAdapter reviewAdapter;
     private final UserServiceClient userServiceClient;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     public ReviewRatingResponseDTO getReviewRating(final int culturalEventId) {
-        return reviewQueryRepository.getReviewRating(culturalEventId);
+        return reviewAdapter.getReviewRating(culturalEventId);
     }
 
 
@@ -45,14 +43,14 @@ public class ReviewService {
             throw new IllegalArgumentException("User not found");
 
         }
-        return reviewRepository.findByCulturalEventIdAndUserId(culturalEventId, userId)
+        return reviewAdapter.findByCulturalEventIdAndUserId(culturalEventId, userId)
                 .map(it -> ReviewResponseDTO.from(it, map.get(it.getUserId())))
                 .orElseThrow(() -> new IllegalArgumentException("Review not found"));
     }
 
     @Transactional(readOnly = true)
     public Slice<ReviewResponseDTO> getReviewList(final int culturalEventId, final long userId, final int lastId) {
-        final List<ReviewResponseDTO.ReviewResponseQueryDTO> queryResult = reviewQueryRepository.getReviewList(culturalEventId, userId, lastId);
+        final List<ReviewResponseDTO.ReviewResponseQueryDTO> queryResult = reviewAdapter.getReviewList(culturalEventId, userId, lastId);
         final List<Long> userIds = queryResult.stream()
                 .map(ReviewResponseDTO.ReviewResponseQueryDTO::userId)
                 .toList();
@@ -69,7 +67,7 @@ public class ReviewService {
             throw new IllegalArgumentException("User not found");
         }
 
-        return reviewQueryRepository.createSlice(content);
+        return reviewAdapter.createSlice(content);
     }
 
 
@@ -85,18 +83,15 @@ public class ReviewService {
                 .culturalEvent(createCulturalEvent(culturalEventId))
                 .build();
 
-        return reviewRepository.save(review);
+        return reviewAdapter.save(review);
     }
 
     @AuthenticatedVisitAuth
     public void updateReview(final int culturalEventId, final long userId, final List<String> storedImageUrl, final UpdateReviewRequestDTO request) {
-        final Review review = reviewRepository.findById(request.reviewId()).orElseThrow(() -> new IllegalArgumentException("Review not found"));
+        final Review review = reviewAdapter.findById(request.reviewId()).orElseThrow(() -> new IllegalArgumentException("Review not found"));
 
-        if(review.getUserId() != userId) {
-            throw new IllegalArgumentException("User not match");
-        }
-        if(review.getCulturalEvent().getId() != culturalEventId) {
-            throw new IllegalArgumentException("Cultural event not match");
+        if(review.validate(userId, culturalEventId)) {
+            throw new IllegalArgumentException();
         }
 
         final List<String> storedImageUrlForDelete = review.getStoredImageUrl();
@@ -107,13 +102,10 @@ public class ReviewService {
 
     @AuthenticatedVisitAuth
     public void deleteReview(final int culturalEventId, final long userId, final int reviewId) {
-        final Review review = reviewRepository.findById(reviewId).orElseThrow(() -> new IllegalArgumentException("Review not found"));
+        final Review review = reviewAdapter.findById(reviewId).orElseThrow(() -> new IllegalArgumentException("Review not found"));
 
-        if(review.getUserId() != userId) {
-            throw new IllegalArgumentException("User not match");
-        }
-        if(review.getCulturalEvent().getId() != culturalEventId) {
-            throw new IllegalArgumentException("Cultural event not match");
+        if(review.validate(userId, culturalEventId)) {
+            throw new IllegalArgumentException();
         }
 
         review.delete();
