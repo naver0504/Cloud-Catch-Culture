@@ -59,4 +59,8 @@ public class Review {
         this.storedImageUrl = storedImageUrl;
         this.content = content;
     }
+
+    public boolean validate(long userId, int culturalEventId) {
+        return this.userId == userId && this.culturalEvent.getId() == culturalEventId;
+    }
 }
