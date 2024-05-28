@@ -1,6 +1,7 @@
-package com.example.reportservice.repository.visit_auth;
+package com.example.reportservice.domain.adapter.visit_auth;
 
 import com.example.reportservice.common.constant.VisitAuthConstant;
+import com.example.reportservice.domain.adapter.visit_auth.query.WhereQuery;
 import com.example.reportservice.dto.visit_auth.VisitAuthRequestResponseDTO;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -12,8 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.example.reportservice.entity.visit_auth.QVisitAuthRequest.visitAuthRequest;
-import static com.example.reportservice.repository.visit_auth.query.WhereQuery.*;
+import static com.example.reportservice.domain.entity.visit_auth.QVisitAuthRequest.visitAuthRequest;
 
 @Repository
 @RequiredArgsConstructor
@@ -31,8 +31,8 @@ public class VisitAuthRequestQueryRepository {
                 ))
                 .from(visitAuthRequest)
                 .where(
-                        visitAuthRequestIdGt(lastId),
-                        visitAuthRequestConstantEq(visitAuthConstant)
+                        WhereQuery.visitAuthRequestIdGt(lastId),
+                        WhereQuery.visitAuthRequestConstantEq(visitAuthConstant)
                 )
                 .orderBy(visitAuthRequest.id.asc())
                 .limit(PAGE_SIZE + 1)

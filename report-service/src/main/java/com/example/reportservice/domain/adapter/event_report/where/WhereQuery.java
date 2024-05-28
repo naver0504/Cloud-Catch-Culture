@@ -1,9 +1,9 @@
-package com.example.reportservice.repository.event_report.where;
+package com.example.reportservice.domain.adapter.event_report.where;
 
 import com.example.reportservice.common.constant.EventReportConstant;
 import com.querydsl.core.types.dsl.BooleanExpression;
 
-import static com.example.reportservice.entity.event_report.QEventReport.eventReport;
+import static com.example.reportservice.domain.entity.event_report.QEventReport.eventReport;
 
 public class WhereQuery {
 

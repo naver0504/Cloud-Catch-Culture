@@ -1,9 +1,9 @@
 package com.example.reportservice.kafka.producer;
 
-import com.example.reportservice.entity.outbox.EventType;
-import com.example.reportservice.entity.outbox.OutBox;
+import com.example.reportservice.domain.entity.outbox.EventType;
+import com.example.reportservice.domain.entity.outbox.OutBox;
 import com.example.reportservice.kafka.KafkaService;
-import com.example.reportservice.repository.outbox.OutBoxRepository;
+import com.example.reportservice.domain.adapter.outbox.OutBoxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

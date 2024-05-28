@@ -1,6 +1,7 @@
-package com.example.reportservice.repository.event_report;
+package com.example.reportservice.domain.adapter.event_report;
 
 import com.example.reportservice.common.constant.EventReportConstant;
+import com.example.reportservice.domain.adapter.event_report.where.WhereQuery;
 import com.example.reportservice.dto.event_report.EventReportResponseDTO;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -12,9 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.example.reportservice.entity.event_report.QEventReport.eventReport;
-import static com.example.reportservice.repository.event_report.where.WhereQuery.eventReportConstantEq;
-import static com.example.reportservice.repository.event_report.where.WhereQuery.eventReportIdGt;
+import static com.example.reportservice.domain.entity.event_report.QEventReport.eventReport;
 
 @Repository
 @RequiredArgsConstructor
@@ -36,8 +35,8 @@ public class EventReportQueryRepository {
                 )
                 .from(eventReport)
                 .where(
-                        eventReportIdGt(lastId),
-                        eventReportConstantEq(eventReportConstant)
+                        WhereQuery.eventReportIdGt(lastId),
+                        WhereQuery.eventReportConstantEq(eventReportConstant)
                 )
                 .orderBy(eventReport.id.asc())
                 .limit(PAGE_SIZE + 1)

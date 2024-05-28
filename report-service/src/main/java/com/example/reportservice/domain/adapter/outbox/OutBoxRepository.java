@@ -1,6 +1,6 @@
-package com.example.reportservice.repository.outbox;
+package com.example.reportservice.domain.adapter.outbox;
 
-import com.example.reportservice.entity.outbox.OutBox;
+import com.example.reportservice.domain.entity.outbox.OutBox;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OutBoxRepository extends JpaRepository<OutBox, Long> {

@@ -1,4 +1,4 @@
-package com.example.reportservice.entity.outbox;
+package com.example.reportservice.domain.entity.outbox;
 
 import com.example.reportservice.kafka.KafkaConstant;
 import lombok.Getter;

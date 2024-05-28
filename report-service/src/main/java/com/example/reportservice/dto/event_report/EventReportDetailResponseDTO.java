@@ -1,7 +1,7 @@
 package com.example.reportservice.dto.event_report;
 
-import com.example.reportservice.entity.event_report.CulturalEventDetail;
-import com.example.reportservice.entity.event_report.EventReport;
+import com.example.reportservice.domain.entity.event_report.CulturalEventDetail;
+import com.example.reportservice.domain.entity.event_report.EventReport;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,8 +20,8 @@ public class EventReportDetailResponseDTO {
     private boolean isAccepted;
     private LocalDateTime createdAt;
 
-    public static EventReportDetailResponseDTO of(final EventReport eventReport) {
-        return EventReportDetailResponseDTO.builder()
+    public EventReportDetailResponseDTO(final EventReport eventReport) {
+        EventReportDetailResponseDTO.builder()
                 .id(eventReport.getId())
                 .culturalEventDetail(eventReport.getCulturalEventDetail())
                 .userId(eventReport.getUserId())
