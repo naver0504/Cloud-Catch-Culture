@@ -34,11 +34,4 @@ public abstract class BaseMessage {
         }
     }
 
-
-    public Optional<BaseMessage> isThereSamePointHistory(final PointHistoryRepository repository) {
-        if(repository.findByUserIdAndCulturalEventIdAndPointChange(this.userId, this.culturalEventId, this.getPointChange()).isPresent()) {
-            return Optional.empty();
-        }
-        return Optional.of(this);
-    }
 }

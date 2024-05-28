@@ -52,9 +52,11 @@ public class KafkaConsumer {
     }
 
     private <T extends BaseMessage> void savePointHistory(T message) {
-        message.isThereSamePointHistory(pointHistoryRepository)
-               .map(BaseMessage::toEntity)
-               .ifPresent(pointHistoryRepository::save);
+        if(pointHistoryRepository.findByUserIdAndCulturalEventIdAndPointChange(message.getUserId(), message.getCulturalEventId(), message.getPointChange()).isPresent()) {
+            return;
+        }
+
+        pointHistoryRepository.save(message.toEntity());
     }
 
     private <T extends BaseMessage> T convertToMessage(final String message, Class<T> clazz) {
