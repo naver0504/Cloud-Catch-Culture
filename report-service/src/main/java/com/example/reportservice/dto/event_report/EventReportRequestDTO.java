@@ -1,7 +1,7 @@
 package com.example.reportservice.dto.event_report;
 
-import com.example.reportservice.entity.event_report.Category;
-import com.example.reportservice.entity.event_report.CulturalEventDetail;
+import com.example.reportservice.domain.entity.event_report.Category;
+import com.example.reportservice.domain.entity.event_report.CulturalEventDetail;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

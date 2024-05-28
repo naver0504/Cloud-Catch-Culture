@@ -20,16 +20,10 @@ public final class ImageUtils {
         return true;
     }
 
-    public static String createImageName(final String originalFilename) {
-        final String storeFilename = UUID.randomUUID() + "_" + originalFilename;
-        return storeFilename;
-    }
-
     private static boolean validateFileSize(final List<MultipartFile> files) {
         if(files == null || files.isEmpty()) {
             return false;
         }
-
         return true;
     }
 

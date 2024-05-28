@@ -1,7 +1,7 @@
 package com.example.reportservice.kafka;
 
-import com.example.reportservice.entity.outbox.OutBox;
-import com.example.reportservice.repository.outbox.OutBoxRepository;
+import com.example.reportservice.domain.entity.outbox.OutBox;
+import com.example.reportservice.domain.adapter.outbox.OutBoxRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;

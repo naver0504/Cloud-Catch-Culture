@@ -15,9 +15,9 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public enum SocialType {
 
-    KAKAO(attributes -> new KakaoOAuth2UserInfo(attributes)),
-    NAVER(attributes -> new NaverOAuth2UserInfo(attributes)),
-    GOOGLE(attributes -> new GoogleOAuth2UserInfo(attributes));
+    KAKAO(KakaoOAuth2UserInfo::new),
+    NAVER(NaverOAuth2UserInfo::new),
+    GOOGLE(GoogleOAuth2UserInfo::new);
 
     private final Function<Map<String, Object>, OAuth2UserInfo> fuction;
 

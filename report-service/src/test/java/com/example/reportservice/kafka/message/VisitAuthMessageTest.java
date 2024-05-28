@@ -8,10 +8,7 @@ class VisitAuthMessageTest {
 
     @Test
     public void test() {
-        VisitAuthMessage visitAuthMessage = VisitAuthMessage.builder()
-                .userId(1L)
-                .culturalEventId(2)
-                .build();
+        VisitAuthMessage visitAuthMessage = new VisitAuthMessage(1, 100);
 
         Object baseMessage = visitAuthMessage;
 
