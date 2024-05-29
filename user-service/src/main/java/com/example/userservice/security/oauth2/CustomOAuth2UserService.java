@@ -72,11 +72,10 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         final User user = userRepository.findByEmail(email).orElse(null);
 
         if (user == null) {
-            return userRepository.save(attributes.toEntity(socialType, attributes.getOAuth2UserInfo()));
+            return userRepository.save(attributes.toEntity(socialType));
         }
 
-        if(!socialType.equals(user.getSocialType())) {
-            //@TODO: 중복 이메일 예외 처리
+        if(socialType != user.getSocialType()) {
             throw new IllegalArgumentException("이미 가입된 이메일입니다.");
         }
         return user;
