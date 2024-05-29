@@ -3,6 +3,7 @@ package com.example.userservice.kafka.message;
 import com.example.userservice.entity.point_history.PointChange;
 import com.example.userservice.entity.point_history.PointHistory;
 import com.example.userservice.entity.user.User;
+import com.example.userservice.kafka.KafkaConstant;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,5 +24,10 @@ public class ReviewMessage extends BaseMessage {
     @Override
     public PointChange getPointChange() {
         return PointChange.REVIEW;
+    }
+
+    @Override
+    public String getRollbackTopic() {
+        return KafkaConstant.ROLLBACK_REVIEW_POINT;
     }
 }

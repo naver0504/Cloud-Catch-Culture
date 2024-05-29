@@ -2,9 +2,6 @@ package com.example.userservice.kafka;
 
 
 import com.example.userservice.kafka.message.BaseMessage;
-import com.example.userservice.kafka.message.EventReportMessage;
-import com.example.userservice.kafka.message.ReviewMessage;
-import com.example.userservice.kafka.message.VisitAuthMessage;
 import com.example.userservice.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -25,27 +22,12 @@ public class ApplicationEventListener {
 
     @TransactionalEventListener(phase = TransactionPhase.BEFORE_COMMIT)
     public void handleReviewMessageBeforeCommit(final BaseMessage message) {
-        userRepository.updateUserPoint(message.getUserId(), message.getPointChange().getPoint());
+        userRepository.updateUserPoint(message.getUserId(), message.getPoint());
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_ROLLBACK)
     public void handleReviewMessageAfterRollback(final BaseMessage message) {
-        kafkaTemplate.send(getRollbackTopic(message), message.toString(objectMapper));
-    }
-
-
-    public String getRollbackTopic(BaseMessage message) {
-        if(message instanceof VisitAuthMessage) {
-            return KafkaConstant.ROLLBACK_VISIT_AUTH_POINT;
-        }
-        if(message instanceof EventReportMessage) {
-            return KafkaConstant.ROLLBACK_EVENT_REPORT_POINT;
-        }
-        if(message instanceof ReviewMessage){
-            return KafkaConstant.ROLLBACK_REVIEW_POINT;
-        }
-
-        throw new IllegalArgumentException("Invalid BaseMessage Type");
+        kafkaTemplate.send(message.getRollbackTopic(), message.toString(objectMapper));
     }
 
 }

@@ -24,7 +24,15 @@ public abstract class BaseMessage {
     public abstract PointHistory toEntity();
 
     @JsonIgnore
-    public abstract PointChange getPointChange();
+    protected abstract PointChange getPointChange();
+
+    @JsonIgnore
+    public abstract String getRollbackTopic();
+
+    @JsonIgnore
+    public int getPoint() {
+        return getPointChange().getPoint();
+    }
 
     public String toString(final ObjectMapper objectMapper) {
         try {
@@ -34,4 +42,10 @@ public abstract class BaseMessage {
         }
     }
 
+    public Optional<BaseMessage> isThereSamePointHistory(final PointHistoryRepository pointHistoryRepository) {
+        if(pointHistoryRepository.findByUserIdAndCulturalEventIdAndPointChange(userId, culturalEventId, getPointChange()).isPresent()) {
+            return Optional.empty();
+        }
+        return Optional.of(this);
+    }
 }
