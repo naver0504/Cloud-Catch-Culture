@@ -5,13 +5,11 @@ import com.example.reportservice.domain.entity.outbox.EventType;
 import com.example.reportservice.domain.entity.outbox.OutBox;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.test.JobLauncherTestUtils;
 import org.springframework.batch.test.JobRepositoryTestUtils;
 import org.springframework.batch.test.context.SpringBatchTest;
-import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
@@ -24,10 +22,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @Import(BatchTestConfiguration.class)
 @SpringBatchTest
 class OutBoxBatchConfigTest {
-
-    @Autowired
-    BeanFactory beanFactory;
-
     @Autowired
     JobLauncherTestUtils jobLauncherTestUtils;
     @Autowired
@@ -55,7 +49,6 @@ class OutBoxBatchConfigTest {
                 .toJobParameters();
 
         // when
-        jobLauncherTestUtils.setJob(beanFactory.getBean(OutBoxBatchConfig.BEAN_PREFIX + "_job", Job.class));
         jobLauncherTestUtils.launchJob(jobParameters);
         // then
         assertEquals(0, outBoxRepository.findAll().size());
