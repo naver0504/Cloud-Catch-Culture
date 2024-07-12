@@ -40,7 +40,7 @@ public class VisitAuthRequestQueryRepository {
 
         boolean hasNext = false;
 
-        if(content.size() == PAGE_SIZE + 1l) {
+        if(content.size() == PAGE_SIZE + 1L) {
             content.remove(PAGE_SIZE);
             hasNext = true;
         }
