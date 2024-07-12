@@ -20,14 +20,20 @@ public class VisitAuthRequestAdapterImpl implements VisitAuthRequestAdapter{
     }
 
     @Override
-    public void save(VisitAuthRequest visitAuthRequest) {
-        visitAuthRequestRepository.save(visitAuthRequest);
+    public Optional<VisitAuthRequest> findById(Integer visitAuthRequestId) {
+        return visitAuthRequestRepository.findById(visitAuthRequestId);
     }
 
     @Override
-    public Optional<VisitAuthRequest> findById(int visitAuthRequestId) {
-        return visitAuthRequestRepository.findById(visitAuthRequestId);
+    public VisitAuthRequest save(VisitAuthRequest visitAuthRequest) {
+        return visitAuthRequestRepository.save(visitAuthRequest);
     }
+
+    @Override
+    public void deleteById(Integer visitAuthRequestId) {
+        visitAuthRequestRepository.deleteById(visitAuthRequestId);
+    }
+
 
     @Override
     public Optional<VisitAuthRequest> findByUserIdAndCulturalEventId(long userId, int culturalEventId) {
