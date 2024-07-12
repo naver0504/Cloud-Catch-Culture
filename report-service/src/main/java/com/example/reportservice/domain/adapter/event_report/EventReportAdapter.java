@@ -10,10 +10,8 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
 public interface EventReportAdapter extends BaseAdapter<EventReport, Integer> {
 
     Slice<EventReportResponseDTO> getEventReportList(final int lastId, final EventReportConstant eventReportConstant);
-
     Optional<EventReport> findByUserIdAndCulturalEventDetail(long userId, CulturalEventDetail culturalEventDetail);
 }
