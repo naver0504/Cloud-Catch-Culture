@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-@ToString
 public class PointHistory {
 
     @Id
