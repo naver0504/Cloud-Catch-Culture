@@ -8,6 +8,7 @@ import com.example.eventservice.domain.entity.event.Category;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -36,7 +37,15 @@ public class CulturalEventQueryRepository {
 
         final LocalDateTime now = LocalDateTime.now();
 
-        final List<EventResponseDTO> content = queryFactory.select(Projections.constructor(
+        JPAQuery<?> query = queryFactory.from(culturalEvent)
+                .where(
+                        WhereQuery.notFinishedCulturalEvent(now),
+                        WhereQuery.titleContains(keyword),
+                        WhereQuery.categoryIn(categoryList)
+                );
+
+        final List<EventResponseDTO> content = query
+                .select(Projections.constructor(
                         EventResponseDTO.class,
                         culturalEvent.id,
                         culturalEvent.culturalEventDetail,
@@ -46,12 +55,7 @@ public class CulturalEventQueryRepository {
                                 culturalEvent.culturalEventDetail.startDate,
                                 now).as("remainDay")
                 ))
-                .from(culturalEvent)
-                .where(
-                        WhereQuery.notFinishedCulturalEvent(now),
-                        WhereQuery.titleContains(keyword),
-                        WhereQuery.categoryIn(categoryList)
-                ).orderBy(
+                .orderBy(
                         setOrderWithSortType(sortType)
                 )
                 .offset(offset)
@@ -59,14 +63,8 @@ public class CulturalEventQueryRepository {
                 .fetch();
 
 
-        final long count = queryFactory
+        final long count = query
                 .select(culturalEvent.count())
-                .from(culturalEvent)
-                .where(
-                        WhereQuery.notFinishedCulturalEvent(now),
-                        WhereQuery.titleContains(keyword),
-                        WhereQuery.categoryIn(categoryList)
-                )
                 .fetchOne();
 
         return new PageImpl<>(content, PageRequest.of(offset, pageSize), count);
