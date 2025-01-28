@@ -36,6 +36,7 @@ public class VisitAuthRequestAdapterImpl implements VisitAuthRequestAdapter{
         visitAuthRequestRepository.deleteById(visitAuthRequestId);
     }
 
+
     @Override
     public Optional<VisitAuthRequest> findByUserIdAndCulturalEventId(long userId, int culturalEventId) {
         return visitAuthRequestRepository.findByUserIdAndCulturalEventId(userId, culturalEventId);
