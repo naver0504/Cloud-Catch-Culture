@@ -37,18 +37,16 @@ public class DistributedLockAop {
             boolean available = rLock.tryLock(distributedLock.waitTime(), distributedLock.leaseTime(), distributedLock.timeUnit());  // (2)
             if (!available) {
                 log.error("Failed to acquire the lock. key: {}", key);
-                return false;
+                throw new IllegalAccessException("Failed to acquire the lock. key: " + key);
             }
             log.info("Successfully acquired the lock. thread = {}", Thread.currentThread().getName());
             return aopForTransaction.proceed(joinPoint);  // (3)
         } catch (InterruptedException e) {
             throw new InterruptedException();
         } finally {
-            try {
-                rLock.unlock();   // (4)
-            } catch (IllegalMonitorStateException e) {
-                log.error("Failed to unlock the lock. key: {}", key);
-
+            if(rLock.isLocked() && rLock.isHeldByCurrentThread()) {
+                rLock.unlock();  // (4)
+                log.info("Successfully released the lock. thread = {}", Thread.currentThread().getName());
             }
         }
     }
