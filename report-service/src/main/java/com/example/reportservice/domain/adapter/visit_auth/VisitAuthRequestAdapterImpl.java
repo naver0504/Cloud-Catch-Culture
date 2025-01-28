@@ -5,10 +5,12 @@ import com.example.reportservice.domain.entity.visit_auth.VisitAuthRequest;
 import com.example.reportservice.dto.visit_auth.VisitAuthRequestResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@Repository
 public class VisitAuthRequestAdapterImpl implements VisitAuthRequestAdapter{
 
     private final VisitAuthRequestQueryRepository visitAuthRequestQueryRepository;

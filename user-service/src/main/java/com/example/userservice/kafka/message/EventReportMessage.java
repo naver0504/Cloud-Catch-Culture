@@ -3,6 +3,7 @@ package com.example.userservice.kafka.message;
 import com.example.userservice.entity.point_history.PointChange;
 import com.example.userservice.entity.point_history.PointHistory;
 import com.example.userservice.entity.user.User;
+import com.example.userservice.kafka.KafkaConstant;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -29,5 +30,10 @@ public class EventReportMessage extends BaseMessage{
     @Override
     public PointChange getPointChange() {
         return PointChange.CREATE_CULTURAL_EVENT;
+    }
+
+    @Override
+    public String getRollbackTopic() {
+        return KafkaConstant.ROLLBACK_EVENT_REPORT_POINT;
     }
 }

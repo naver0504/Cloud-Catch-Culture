@@ -31,12 +31,12 @@ public class OAuthAttributes {
 
     }
 
-    public User toEntity(final SocialType socialType, final OAuth2UserInfo oauth2UserInfo) {
+    public User toEntity(final SocialType socialType) {
         return User.builder()
                 .socialType(socialType)
-                .email(oauth2UserInfo.getEmail())
-                .nickname(oauth2UserInfo.getNickname())
-                .storedProfileImageUrl(oauth2UserInfo.getProfileImageURL())
+                .email(oAuth2UserInfo.getEmail())
+                .nickname(oAuth2UserInfo.getNickname())
+                .storedProfileImageUrl(oAuth2UserInfo.getProfileImageURL())
                 .role(Role.USER)
                 .build();
     }

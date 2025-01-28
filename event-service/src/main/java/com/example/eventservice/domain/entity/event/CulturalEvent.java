@@ -38,4 +38,12 @@ public class CulturalEvent {
                 .id(culturalEventId)
                 .build();
     }
+
+    public void updateLikeCount(int count) {
+        this.likeCount += count;
+    }
+
+    public void updateStarCount(int count) {
+        this.starCount += count;
+    }
 }

@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
 public interface VisitAuthRequestAdapter extends BaseAdapter<VisitAuthRequest, Integer> {
 
     Slice<VisitAuthRequestResponseDTO> getVisitAuthRequestList(final int lastId, final VisitAuthConstant visitAuthConstant);

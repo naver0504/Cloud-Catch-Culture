@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum EventType {
     VISIT_AUTH(KafkaConstant.CREATE_VISIT_AUTH),
-    EVENT_REPORT(KafkaConstant.CREATE_EVENT_REPORT);
+    EVENT_REPORT(KafkaConstant.CREATE_EVENT_REPORT),
+    TEST("test");
 
     private final String topic;
 

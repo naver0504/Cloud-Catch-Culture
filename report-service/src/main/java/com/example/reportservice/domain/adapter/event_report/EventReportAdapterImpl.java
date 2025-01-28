@@ -7,10 +7,12 @@ import com.example.reportservice.domain.entity.event_report.EventReport;
 import com.example.reportservice.dto.event_report.EventReportResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Slice;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@Repository
 public class EventReportAdapterImpl implements EventReportAdapter{
 
     private final EventReportRepository eventReportRepository;

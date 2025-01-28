@@ -68,12 +68,11 @@ public class CulturalEventService {
     @DistributedLock(key = "#culturalEventId+':'+#userId+':'+#likeStar")
     public void createInteraction(final int culturalEventId, final long userId, final LikeStar likeStar) {
 
-        if(culturalEventAdapter.existsCulturalEvent(culturalEventId)) {
-            throw new IllegalStateException("Cultural event does not exist");
-        }
-        interactionService.saveLikeStar(culturalEventId, userId, likeStar);
-        likeStar.updateCount(culturalEventAdapter, culturalEventId, PLUS_COUNT);
+        CulturalEvent culturalEvent = culturalEventAdapter.findById(culturalEventId)
+                .orElseThrow(() -> new IllegalStateException("Cultural event does not exist"));
 
+        interactionService.saveLikeStar(culturalEventId, userId, likeStar);
+        likeStar.updateCount(culturalEvent, PLUS_COUNT);
     }
 
 
@@ -91,11 +90,11 @@ public class CulturalEventService {
     @DistributedLock(key = "#culturalEventId")
     public void cancelInteraction(final int culturalEventId, final long userId, final LikeStar likeStar) {
 
-        if(culturalEventAdapter.existsCulturalEvent(culturalEventId)) {
-            throw new IllegalStateException("Cultural event does not exist");
-        }
+        CulturalEvent culturalEvent = culturalEventAdapter.findById(culturalEventId)
+                .orElseThrow(() -> new IllegalStateException("Cultural event does not exist"));
+
         interactionService.deleteLikeStar(culturalEventId, userId, likeStar);
-        likeStar.updateCount(culturalEventAdapter, culturalEventId, MINUS_COUNT);
+        likeStar.updateCount(culturalEvent, MINUS_COUNT);
     }
 
     public CulturalEventDetail existsCulturalEvent(final int culturalEventId) {

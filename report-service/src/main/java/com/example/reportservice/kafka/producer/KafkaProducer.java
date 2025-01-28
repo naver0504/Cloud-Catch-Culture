@@ -1,30 +1,36 @@
 package com.example.reportservice.kafka.producer;
 
-import com.example.reportservice.domain.entity.outbox.EventType;
-import com.example.reportservice.domain.entity.outbox.OutBox;
-import com.example.reportservice.kafka.KafkaService;
-import com.example.reportservice.domain.adapter.outbox.OutBoxRepository;
+import com.example.reportservice.batch.OutBoxBatchConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.time.LocalDateTime;
+
 
 @RequiredArgsConstructor
 @Component
 @Slf4j
 public class KafkaProducer {
 
-    private final KafkaService kafkaService;
-    private final OutBoxRepository outBoxRepository;
+    private final JobLauncher jobLauncher;
+    private final OutBoxBatchConfig outBoxBatchConfig;
 
     @Scheduled(fixedRate = 10000) // 10 seconds
     public void sendOutBoxMessage() {
-        final List<OutBox> outBoxes = outBoxRepository.findAll();
-        for (final OutBox message : outBoxes) {
-            final EventType eventType = message.getEventType();
-            kafkaService.sendMessage(eventType.getTopic(), message);
+        log.info("Sending outbox messages to Kafka");
+        JobParameters jobParameters = new JobParametersBuilder()
+                .addLocalDateTime("time", LocalDateTime.now())
+                .toJobParameters();
+
+        try {
+            jobLauncher.run(outBoxBatchConfig.outBoxJob(), jobParameters);
+        } catch (Exception e) {
+            log.error("Error while spring outbox batch", e);
         }
     }
 }
