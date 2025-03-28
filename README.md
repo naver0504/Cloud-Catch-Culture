@@ -26,7 +26,7 @@
 ![Catch Culture cloud (1)](https://github.com/user-attachments/assets/3172131f-b461-46b4-8a60-c39897ee1e39)
 
 
-- **Eureka**를 사용하여 **Registry Service**를 구성하고, **user-service**, **event-service**, **report-service**를 **Eureka Server**에 ****등록했습니다.
+- **Eureka**를 사용하여 **Registry Service**를 구성하고, **user-service**, **event-service**, **report-service**를 **Eureka Server**에 등록했습니다.
 - 각 서비스는 서로 데이터를 주고받기 위해 **Spring Cloud OpenFeign**을 사용하여 **REST API** 기반의 간편한 통신을 구현했고 또한, **Kafka**를 활용해 비동기 메시징을 처리합니다.
 - 외부에서 들어오는 클라이언트 요청은 **Spring Cloud API Gateway**를 통해 각 서비스로 **라우팅**되며, API Gateway는 **JWT 토큰 검증**을 통해 요청의 유효성을 확인합니다.
 - **event-service**에서는 **Redis**를 사용하여 **분산 Lock 메커니즘**을 구현했습니다. **Redis**는 **Kafka**와 함께 **Docker**를 사용하여 컨테이너화하였습니다.
